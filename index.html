@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Homestuck 5+</title>
+
+  <meta content="Homestuck 5+" property="og:title" />
+  <meta content="Homestuck 5+ is a tool to format Homestuck style dialogue. Entering homestuck style dialogue in the left text area will generate formatted homestuck dialogue in the right area." property="og:description" />
+  <meta content="https://flaringk.github.io/homestuck5plus/" property="og:url" />
+  <meta content="#0715cd" data-react-helmet="true" name="theme-color" />
+
+  <style id="genStyle"></style>
+  <link rel="stylesheet" href="./ao3Homestuck.css">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  
+  <div id="textWrap">
+    <textarea name="input" id="input" onkeyup="transcribe()"></textarea>
+    <div id="workskin" class="workskin"></div>
+  </div>
+  <div id="options">
+    <button onclick="openPopup('help')" id="helpBtn">Help!</button>
+    <button onclick="openPopup('about')" id="aboutBtn">About</button>
+    <button onclick="openPopup('format')" id="formatsBtn">Edit Formats</button>
+    <button onclick="openPopup('copy')" id="copyBtn">Copy Html & CSS</button>
+  </div>
+
+  <div id="popup" onclick="closePopup()">
+
+    <div id="help">
+      <h1>Homestuck 5+ Help</h1>
+      <p>Homestuck 5+ is a tool to format Homestuck style dialogue. Entering homestuck style dialogue in the left text area will generate formatted homestuck dialogue in the right area.</p>
+      <p>If a line begins with a handle, it will be formatted as a pesterlog.</p>
+      <div class="ex">
+        <div>LORE: hehehe Hello!!</div>
+        <div>→</div>
+        <div>LORE: hehehe Hello!!</div>
+      </div>
+      <p>If that handle has an associated colour class, that specific line will be formatted in that colour. These can be viewed and edited by pressing the Edit Formats button</p>
+      <div class="ex">
+        <div>
+          ROSE: Hello Dave. <br>
+          DAVE: sup <br>
+          JADE: hi guys!!
+        </div>
+        <div>→</div>
+        <div>
+          <span style="color: #b536da">ROSE: Hello Dave.</span><br>
+          <span style="color: #e00707">DAVE: sup</span><br>
+          <span style="color: #4ac925">JADE: hi guys!!</span><br>
+        </div>
+      </div>
+      <p>Handles that include "-" will have them removed when they are formatted</p>
+      <div class="ex">
+        <div>
+          TT: Hello. <br>
+          TT-: Sup. <br>
+          GG-: gosh! <br>
+          UU-: FUCK
+        </div>
+        <div>→</div>
+        <div>
+          <span style="color: #b536da">TT: Hello.</span><br>
+          <span style="color: #f2a400">TT: Sup.</span><br>
+          <span style="color: #00d5f2">GG: gosh!</span><br>
+          <span style="color: #323232">UU: FUCK</span><br>
+        </div>
+      </div>
+      <p>The {HANDLE} syntax will be expanded into the corrisponding chumHandle, provided the handle has an associated handle. These can also be viewed and edited by pressing the Edit Formats button. This will also mark the paragraph as a pesterlog.</p>
+      <div class="ex">
+        <div>{CG}'s computer exploded</div>
+        <div>→</div>
+        <div><span style="color: #626262">carcinoGeneticist [CG]</span>'s computer <br> exploded</div>
+      </div>
+      <p>Once finished, press the Copy Html & CSS button to copy the generated HTML. Then simply paste that in to your fanficion site of choice, and ensure the associated workskin or CSS is applied. If you are using the default formatting options and putting your work on AO3, all you need to do is apply the standard Homestuck workskin. Otherwise you will need to make your own workskin.</p>
+    </div>
+
+    <div id="about">
+      <h1>About Homestuck 5+</h1>
+      <p>Homestuck 5+ is directly inspired by the origninal <a href="http://www.homestuck5.com/">Homestuck5</a>, created by <a href="https://archiveofourown.org/works/22868386">itsdave on AO3</a>.</p>
+      <p>This is the exact same concept but with added functionality, including editible format options, pesterlog support, mspfa support and more.</p>
+      <p>Made by <a href="https://flaringk.github.io/">FlaringK</a></p>
+    </div>
+
+    <div id="format">
+      <h1>Edit Formats</h1>
+      <p><b>Basic options</b></p>
+      <p>
+        <div class="opt"> <label for="autoLog">Enable auto pesterlog formatting</label> <input type="checkbox" name="autoLog" id="autoLog" onchange="transcribe()" checked></div>
+      </p>
+      <p>
+        <b>Character Formats</b> <br> Edit the formats' names and chumhandle
+      </p>
+      <p>
+        <button onclick="restoreDefaultFormats()">Restore default formats</button>
+      </p>
+      <div id="userFormats" class="formatInteract"></div>
+      <p>
+        <label for="userFormatJson">Exported JSON string:</label> <input type="text" name="userFormatJson" id="userFormatJson" style="width: 80%;">
+      </p>
+      <p><b>Add Formats</b> <br> New formats may not be included in AO3's standard homstuck workskin, and will require a custom workskin to be compatible. The format class name will be the html class given to the span.</p>
+      <div class="formatInteract">
+        <label for="newFormatName">Format Class Name</label> <input type="text" name="newFormatName" id="newFormatName"> <br>
+        <label for="newFormatCol">Format Color</label> <input type="color" name="newFormatCol" id="newFormatCol"> <br>
+        <button onclick="addNewFormat()">Add new format</button>
+      </div>
+      <p><b>Import Formats</b> <br> Formats will automatically be saved in local storage when they are changed, however you can import a group of formats by pasting in it's JSON string below.</p>
+      <p>
+        <label for="importJson">Import JSON string:</label> <input type="text" name="importJson" id="importJson" style="width: 80%;"> <br>
+        <button onclick="importJson()">Import</button>
+      </p>
+    </div>
+
+    <div id="copy">
+      <h1>Copy Html</h1>
+      <p>
+        <div id="skinStatus">Work is compatible</div>
+      </p>
+      <p style="text-align: center;">
+        <b>Html</b> <br>
+        <textarea name="finalHtml" id="finalHtml" cols="70" rows="10" style="margin: auto; display: block;"></textarea>
+      </p>
+      <p style="text-align: center;">
+        <b>CSS</b> <br>
+        <textarea name="finalCSS" id="finalCSS" cols="70" rows="10" style="margin: auto; display: block;"></textarea>
+      </p>
+    </div>
+
+  </div>
+
+  <script src="./homestuck6.js"></script>
+
+</body>
+</html>
