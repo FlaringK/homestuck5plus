@@ -37,7 +37,7 @@
         <div>→</div>
         <div>LORE: hehehe Hello!!</div>
       </div>
-      <p>If that handle has an associated colour class, that specific line will be formatted in that colour. These can be viewed and edited by pressing the Edit Formats button</p>
+      <p>If that handle has an associated colour class, that specific line will be formatted in that colour. These can be viewed and edited by pressing the Edit Formats button.</p>
       <div class="ex">
         <div>
           ROSE: Hello Dave. <br>
@@ -51,7 +51,7 @@
           <span style="color: #4ac925">JADE: hi guys!!</span><br>
         </div>
       </div>
-      <p>Handles that include "-" will have them removed when they are formatted</p>
+      <p>Handles that include "-" will have them removed when they are formatted.</p>
       <div class="ex">
         <div>
           TT: Hello. <br>
@@ -67,17 +67,24 @@
           <span style="color: #323232">UU: FUCK</span><br>
         </div>
       </div>
-      <p>The {HANDLE} syntax will be expanded into the corrisponding chumHandle, provided the handle has an associated handle. These can also be viewed and edited by pressing the Edit Formats button. This will also mark the paragraph as a pesterlog.</p>
+      <p>The {Handle} syntax will be expanded into the corrisponding chumHandle, provided the handle has an associated handle. These can also be viewed and edited by pressing the Edit Formats button. This will also mark the paragraph as a pesterlog.</p>
       <div class="ex">
         <div>{CG}'s computer exploded</div>
         <div>→</div>
         <div><span style="color: #626262">carcinoGeneticist [CG]</span>'s computer <br> exploded</div>
       </div>
-      <p>Pesterlogs can be also manually assinged by writing %LOG% at the top of a paragraph</p>
+      <p>Pesterlogs can be also manually assinged by writing %LOG% at the top of a paragraph.</p>
       <div class="ex">
         <div>%LOG% <br> This would be normal otherwise.</div>
         <div>→</div>
         <div>This would be normal otherwise.</div>
+      </div>
+      <p>Formats can also be called outside of pesterlogs using the $Handle syntax, and then closed with $- or at the end of the text line.</p>
+      <div class="ex">
+        <div>"$GG june?$-" I heard her call, "$GG is <br> that you?$-"</div>
+        <div>→</div>
+        <div style="display: none;"></div> 
+        <div>"<span style="color: #4ac925; font-family: 'Courier New', Courier, monospace; font-weight: bold;">june?</span>" I heard her call, "<span style="color: #4ac925; font-family: 'Courier New', Courier, monospace; font-weight: bold;">is that you?</span>"</div>
       </div>
       <p>Once finished, press the Copy Html & CSS button to copy the generated HTML. Then simply paste that in to your fanficion site of choice, and ensure the associated workskin or CSS is applied. If you are using the default formatting options and putting your work on AO3, all you need to do is apply the standard Homestuck workskin. Otherwise you will need to make your own workskin.</p>
     </div>
@@ -94,6 +101,7 @@
       <p><b>Basic options</b></p>
       <p>
         <div class="opt"> <label for="autoLog">Enable auto pesterlog formatting</label> <input type="checkbox" name="autoLog" id="autoLog" onchange="transcribe()" checked></div>
+        <div class="opt"> <label for="handleUpper">Captitalise pesterlog handles</label> <input type="checkbox" name="handleUpper" id="handleUpper" onchange="transcribe()"></div>
       </p>
       <p>
         <b>Character Formats</b> <br> Edit the formats' names and chumhandle

@@ -11,7 +11,7 @@ const defultFormats = {
   },
   dave: {
     color: "#e00707",
-    names: ["Dave", "TG", "AR", "TT--", "arquiusprite"],
+    names: ["Dave", "TG"],
     chum: "turntechGodhead"
   },
   jade: {
@@ -39,6 +39,11 @@ const defultFormats = {
   dirk: {
     color: "#f2a400",
     names: ["Dirk", "TT-", "Davesprite"],
+    chum: "timaeusTestified"
+  },
+  AR: {
+    color: "#e00707",
+    names: ["AR", "TT--", "arquiusprite"],
     chum: "timaeusTestified"
   },
 
@@ -161,14 +166,29 @@ let compatibleKeys = Object.keys(defultFormats)
 // Regex
 const regHandle = /^[^\s]*?:/
 const regChum = /{[^\s]*?}/g
+const regCharSpans = /\$[^\s]*/g
 
 const logSyntax = "%LOG%"
+const ao3CSS = `#workskin .block {
+  max-width: 650px;
+  margin-left: auto;
+  margin-right: auto;
+  background: #eee;
+  border: 1px dashed gray;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 35px;
+  padding-right: 35px;
+}`
 
 // Transcribe Input
 const transcribe = () => {
   const outputDiv = document.getElementById("workskin")
   const inputText = document.getElementById("input").value.trim()
+
+  // Options
   const doAutoLog = document.getElementById("autoLog").checked
+  const doHandleUpper = document.getElementById("handleUpper").checked
 
   // Split into lines
   const lines = inputText.split("\n")
@@ -202,6 +222,26 @@ const transcribe = () => {
       let line = text.trim()
       let doLineBreak = true
 
+      // == Add spans into text ==
+      if (regCharSpans.test(line)) {
+        const spans = line.match(regCharSpans)
+
+        spans.forEach(key => {
+          const chara = key.slice(1)
+          console.log(chara)
+
+          for (const [spanClass, format] of Object.entries(userFormats)) {
+            format.names.forEach(formatHandle => {
+              if (formatHandle.toLowerCase() == chara.toLowerCase()) {
+                line = line.replace(key + " ", `<span class="${spanClass}">`) + "</span>"
+              }
+            })
+          }
+
+        })
+      }
+      line = line.replace(/\$-/g, "</span>")
+
       // == If line starts with a handle (EB:), format it ==
       if (regHandle.test(line)) {
         isParagraphBlock = !isParagraphBlock ? doAutoLog : isParagraphBlock
@@ -214,9 +254,9 @@ const transcribe = () => {
             if (formatHandle.toLowerCase() == lineHandle.toLowerCase()) {
 
               // Remove "-" from handle
-              if (lineHandle.includes("-")) {
-                line = line.replace(lineHandle, lineHandle.replace(/-/g, ""))
-              }
+              if (lineHandle.includes("-")) line = line.replace(lineHandle, lineHandle.replace(/-/g, ""))
+              // Capitalise Handles if doHandleUpper
+              if (doHandleUpper) line = line.replace(lineHandle, lineHandle.toUpperCase())
 
               // If Dual colour surround handle with colour
               if ("dualCol" in format) {
@@ -241,7 +281,7 @@ const transcribe = () => {
         const chumHandles = line.match(regChum)
 
         chumHandles.forEach(chumHandle => {
-          const handle = chumHandle.slice(1, -1)
+          const handle = doHandleUpper ? chumHandle.slice(1, -1).toUpperCase() : chumHandle.slice(1, -1)
 
           for (const [spanClass, format] of Object.entries(userFormats)) {
             // If the format doesn't have a chumhandle, skip it
@@ -465,7 +505,7 @@ const addNewFormat = () => {
   if (!className.value) return
 
   let newUserFormat = JSON.parse(JSON.stringify(userFormats))
-  newUserFormat[className.value.toLowerCase()] = {
+  newUserFormat[className.value] = {
     color: color.value,
     names: [],
   }
@@ -479,7 +519,7 @@ const addNewFormat = () => {
 
 const genCSSstyle = () => {
   const genStyle = document.getElementById("genStyle")
-  genStyle.innerHTML = ""
+  genStyle.innerHTML = ao3CSS
   for (const [spanClass, format] of Object.entries(userFormats)) {
     genStyle.innerHTML += `
     #workskin .${spanClass} { font-size: 14px; font-weight: bold; font-family: courier, monospace; color: ${format.color}; }

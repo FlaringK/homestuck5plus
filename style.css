@@ -23,6 +23,7 @@ body {
   box-sizing: border-box;
 
   font: 1em 'Lucida Grande','Lucida Sans Unicode',Verdana,Helvetica,sans-serif;
+  font-size: .875em;
 }
 
 #textWrap {
@@ -108,6 +109,7 @@ body {
 
 .ex > div:first-child {
   font: 1em 'Lucida Grande','Lucida Sans Unicode',Verdana,Helvetica,sans-serif;
+  font-size: .875em;
 }
 
 .ex > div:nth-child(3) {
