@@ -202,7 +202,9 @@ const transcribe = () => {
       if (currentParagraph.length > 0) {
         allParagraphs.push(currentParagraph);
         currentParagraph = [];
-      }    
+      } else {
+        allParagraphs.push([" "]);
+      }
     } else {
       currentParagraph.push(line);
     }
