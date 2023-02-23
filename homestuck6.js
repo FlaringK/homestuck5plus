@@ -234,6 +234,15 @@ const transcribe = () => {
             format.names.forEach(formatHandle => {
               if (formatHandle.toLowerCase() == chara.toLowerCase()) {
                 line = line.replace(key + " ", `<span class="${spanClass}">`) + "</span>"
+
+                // Add spanclass to format
+                if (!usedFormats.includes(spanClass)) usedFormats.push(spanClass)
+              }
+              if ("$" + formatHandle.toLowerCase() == chara.toLowerCase()) {
+                line = line.replace(key + " ", `<span class="${spanClass}-plain">`) + "</span>"
+
+                // Add spanclass to format
+                if (!usedFormats.includes(spanClass + "-plain")) usedFormats.push(spanClass + "-plain")
               }
             })
           }
@@ -523,6 +532,7 @@ const genCSSstyle = () => {
   for (const [spanClass, format] of Object.entries(userFormats)) {
     genStyle.innerHTML += `
     #workskin .${spanClass} { font-size: 14px; font-weight: bold; font-family: courier, monospace; color: ${format.color}; }
+    #workskin .${spanClass}-plain { color: ${format.color}; }
     `
   }
 }
