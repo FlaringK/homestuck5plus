@@ -358,7 +358,7 @@ const transcribe = () => {
         line = ""
       }
 
-      paragraphText += line + (doLineBreak ? " <br/>\n" : "")
+      paragraphText += "  " + line + (doLineBreak ? " <br/>\n" : "")
 
     })
 
