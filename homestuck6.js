@@ -32,7 +32,7 @@ const defultFormats = {
     chum: "golgothasTerror"
   },
   roxy: {
-    color: "#f141ef",
+    color: "#ff6ff2",
     names: ["Roxy", "TG-", "Jaspersprite"],
     chum: "tipsyGnostalgic"
   },
@@ -160,7 +160,19 @@ const defultFormats = {
   }
 }
 
+let homestuckFormats = JSON.parse(JSON.stringify(defultFormats))
+homestuckFormats.japser = {
+  color: "#f141ef",
+  names: ["jasper"],
+}
+homestuckFormats.jasprose = {
+  dualCol: true,
+  names: ["Jasprosesprite^2", "Jazz"],
+  colorClasses: ["japser", "rose"]
+}
+
 let userFormats = localStorage.getItem('userFormats') ? JSON.parse(localStorage.getItem('userFormats')) : defultFormats
+let discordFormats = {}
 let compatibleKeys = Object.keys(defultFormats)
 
 // Regex
@@ -168,7 +180,11 @@ const regHandle = /^[^\s]*?:/
 const regChum = /{[^\s]*?}/g
 const regCharSpans = /\$[^\s]*/g
 
+const regParagraph = /<p>((.|\n)*?)<\/p>/g
+const regParaBlock = /<p class="block"><span class="pesterlog">((.|\n)*?)<\/span><\/p>/g
+
 const logSyntax = "%LOG%"
+
 const ao3CSS = `#workskin .block {
   max-width: 650px;
   margin-left: auto;
@@ -179,7 +195,27 @@ const ao3CSS = `#workskin .block {
   padding-bottom: 10px;
   padding-left: 35px;
   padding-right: 35px;
+} 
+#workskin .pesterlog {
+  font-size: 14px;
+  font-weight: bold;
+  font-family: courier, monospace;
+  color: #000000;
 }`
+
+// Convert Work styles
+const workStyleFunctions = [
+  // Mspfa
+  output => {
+    const mspfa = document.getElementById("slide")
+    mspfa.innerHTML = output.replace(regParaBlock, `<div class="spoiler"><div>$1</div></div><br>`).replace(regParagraph, `$1 <br>`)
+  },
+  // Discord
+  output => {
+    const discord = document.getElementById("discord")
+    discord.innerHTML = output.replace(/<span class="(.+?)"/g, (match, p1) => `<span class="${discordFormats[p1] ? discordFormats[p1] : "normal"}"`)
+  },
+]
 
 // Transcribe Input
 const transcribe = () => {
@@ -322,24 +358,25 @@ const transcribe = () => {
         line = ""
       }
 
-      paragraphText += line + (doLineBreak ? "<br/>" : "")
+      paragraphText += line + (doLineBreak ? " <br/>\n" : "")
 
     })
 
     if (isParagraphBlock) {
-      output += `<p class="block"><span class="pesterlog">${paragraphText}</span></p>\n`
+      output += `<p class="block"><span class="pesterlog">${paragraphText}</span></p>\n\n`
     } else {
-      output += `<p>${paragraphText}</p>\n`
+      output += `<p>${paragraphText}</p>\n\n`
     }
 
   })
   
   outputDiv.innerHTML = output
 
-  document.getElementById("finalHtml").innerText = outputDiv.innerHTML
-  document.getElementById("finalCSS").innerText = document.getElementById("genStyle").innerHTML
+  document.getElementById("finalHtml").value = outputDiv.innerHTML
+  document.getElementById("finalCSS").innerText = document.getElementById("genAo3Style").innerHTML
 
   setSkinStatus(usedFormats)
+  convertWork(output)
 
 }
 
@@ -360,7 +397,11 @@ const setSkinStatus = usedFormats => {
   }
 }
 
-transcribe()
+const convertWork = output => {
+
+  workStyleFunctions.forEach(func => { func(output) })
+
+}
 
 // == Pop ups == //
 
@@ -423,6 +464,7 @@ const genFormatEditor = () => {
     }
 
   }
+  genCSSstyle()
 }
 
 const toggleCollapse = spanClass => {
@@ -504,8 +546,8 @@ const deleteFormat = spanClass => {
   updateUserFormat(newUserFormat)
 }
 
-const restoreDefaultFormats = () => {
-  updateUserFormat(JSON.parse(JSON.stringify(defultFormats)))
+const restoreDefaultFormats = Format => {
+  updateUserFormat(JSON.parse(JSON.stringify(Format)))
   genFormatEditor()
 }
 
@@ -529,14 +571,72 @@ const addNewFormat = () => {
 }
 
 const genCSSstyle = () => {
-  const genStyle = document.getElementById("genStyle")
-  genStyle.innerHTML = ao3CSS
+  // Normal CSS
+  const genAo3Style = document.getElementById("genAo3Style")
+  genAo3Style.innerHTML = ao3CSS
+  
+  const genMSPFAStyle = document.getElementById("genMSPFAStyle")
+
+  // Discord
+  const discordCols = {
+    // normal: "#dcddde",
+    // white: "#ffffff",
+    red: "#dc322f",
+    yellow: "#b58900",
+    green: "#859900",
+    cyan: "#2aa198",
+    blue: "#268bd2",
+    pink: "#d33682",
+    // grey: "#4f545c",
+  }
+
+  // Figure out closets colours
+  // https://codepen.io/romainblatrix/pen/YXgBoO?editors=1010
+  const hexToRgb = (hex) => {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    } : null;
+  }
+  
+  const getDiffColor = (cola, colb) => {
+    a = hexToRgb(cola);
+    b = hexToRgb(colb);
+    return Math.sqrt(Math.pow((a.r - b.r),2) + Math.pow((a.g - b.g),2) + Math.pow((a.b - b.b),2));
+  }
+
   for (const [spanClass, format] of Object.entries(userFormats)) {
-    genStyle.innerHTML += `
+    // CSS
+    genAo3Style.innerHTML += `
     #workskin .${spanClass} { font-size: 14px; font-weight: bold; font-family: courier, monospace; color: ${format.color}; }
     #workskin .${spanClass}-plain { color: ${format.color}; }
     `
+    genMSPFAStyle.innerHTML += `
+    #slide .${spanClass} { color: ${format.color} }
+    #slide .${spanClass}-plain { color: ${format.color}; }
+    `
+    
+    // Discord    
+    if (format.color) {
+      let closestCol = [1000, "grey"]
+      for (const [colName, hexCol] of Object.entries(discordCols)) {
+        const diff = getDiffColor(format.color, hexCol)
+        if (closestCol[0] > diff) closestCol = [diff, colName]
+      }
+      discordFormats[spanClass] = closestCol[1]
+
+      let greyTest = hexToRgb(format.color)
+      if (greyTest.r == greyTest.b && greyTest.b == greyTest.g) {
+        discordFormats[spanClass] = greyTest.r > 60 ? greyTest.r > 128 ? "white" : "normal" : "grey"
+      }
+    }
+    
+
   }
+
+  console.log(discordFormats)
 }
 
 const importJson = () => {
@@ -549,3 +649,4 @@ const importJson = () => {
 
 genFormatEditor()
 genNewUserFormat()
+transcribe()

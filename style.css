@@ -14,21 +14,98 @@ body {
   box-sizing: border-box;
 }
 
-#workskin {
+#outputs {
   border: 1px solid #000;
   height: 90vh;
   resize: none;
-  overflow-y: scroll;
   width: 50%;
   box-sizing: border-box;
-
-  font: 1em 'Lucida Grande','Lucida Sans Unicode',Verdana,Helvetica,sans-serif;
-  font-size: .875em;
+  overflow-y: scroll;
+  position: relative;
 }
 
 #textWrap {
   display: flex;
 }
+
+#outputHeader {
+  padding: 0.2em;
+  border-bottom: 1px solid #000;
+  font-family: Arial, Helvetica, sans-serif;
+  position: sticky;
+  top: 0; left: 0; right: 0;
+  background: white;
+}
+
+/* Work Styles */
+
+#workskin {
+  font: 1em 'Lucida Grande','Lucida Sans Unicode',Verdana,Helvetica,sans-serif;
+  font-size: .875em;
+  padding: 0.5em 1em;
+}
+
+#slide {
+  font-family: "Courier New", Courier, monospace;
+  font-weight: bold;
+  font-size: 14px;
+  text-align: center;
+  padding: 25px;
+  word-wrap: break-word;
+  word-break: break-word;
+  background-color: #eeeeee;
+}
+
+#slide .spoiler {
+  border: 1px dashed gray;
+  padding: 1px;
+}
+
+#slide .spoiler > div:last-child {
+  margin: 12px 5%;
+  padding: 3px;
+  text-align: left;
+}
+
+@font-face {
+  font-family: Uni sans;
+  src: url(./Uni\ Sans\ Regular.ttf);
+}
+
+#discord {
+  background-color: #36393f;
+  font-size: 1rem;
+  line-height: 1.375rem;
+  color: #dcddde;
+  font-family: "gg sans","Noto Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+  padding: 0.5em 1em;
+}
+
+#discord .block {
+  font-family: Consolas,"Andale Mono WT","Andale Mono","Lucida Console","Lucida Sans Typewriter","DejaVu Sans Mono","Bitstream Vera Sans Mono","Liberation Mono","Nimbus Mono L",Monaco,"Courier New",Courier,monospace;
+  background-color: #2f3136;
+  padding: .5em;
+  border-radius: 4px;
+  border: 1px solid #202225;
+}
+
+#discord p:not(.block) span {
+  font-family: Consolas,"Andale Mono WT","Andale Mono","Lucida Console","Lucida Sans Typewriter","DejaVu Sans Mono","Bitstream Vera Sans Mono","Liberation Mono","Nimbus Mono L",Monaco,"Courier New",Courier,monospace;
+  background-color: #2f3136;
+  border-radius: 3px;
+  font-size: 85%;
+  padding: .2em;
+  margin: -.2em 0;
+}
+
+#discord .block .white { color: #ffffff }
+#discord .block .red { color: #dc322f }
+#discord .block .yellow { color: #b58900 }
+#discord .block .green { color: #859900 }
+#discord .block .cyan { color: #2aa198 }
+#discord .block .blue { color: #268bd2 }
+#discord .block .pink { color: #d33682 }
+#discord .block .grey { color: #4f545c }
 
 /* Options Hud */
 
@@ -188,10 +265,10 @@ body {
   border-radius: 10px;
 }
 
-.green {
+#skinStatus.green {
   background: lightgreen;
 }
 
-.red {
+#skinStatus.red {
   background: lightcoral;
 }

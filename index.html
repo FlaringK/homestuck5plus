@@ -9,8 +9,9 @@
   <meta content="https://flaringk.github.io/homestuck5plus/" property="og:url" />
   <meta content="#0715cd" data-react-helmet="true" name="theme-color" />
 
-  <style id="genStyle"></style>
-  <link rel="stylesheet" href="./ao3Homestuck.css">
+  <style id="genAo3Style"></style>
+  <style id="genMSPFAStyle"></style>
+  <!-- <link rel="stylesheet" href="./ao3Homestuck.css"> -->
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
@@ -26,8 +27,15 @@ TG: sup
 Logs can be manually created with %LOG%
 
 You can also use pesterlog text outside of logs $TT like so.$- And then exited like this.
-      </textarea>
-    <div id="workskin" class="workskin"></div>
+    </textarea>
+    <div id="outputs">
+      <div id="outputHeader" style="display: none;">Display style: <select name="showWork" id="showWork"></select></div>
+      <div id="works">
+        <div id="workskin" class="workskin"></div>
+        <div id="slide" class="mspfa" style="display: none;"></div>
+        <div id="discord" class="discord" style="display: none;"></div>
+      </div>
+    </div>
   </div>
   <div id="options">
     <button onclick="openPopup('help')" id="helpBtn">Help!</button>
@@ -124,7 +132,8 @@ You can also use pesterlog text outside of logs $TT like so.$- And then exited l
         <b>Character Formats</b> <br> Edit the formats' names and chumhandle
       </p>
       <p>
-        <button onclick="restoreDefaultFormats()">Restore default formats</button>
+        <button onclick="restoreDefaultFormats(defultFormats)">Restore A03 compatible formats</button>
+        <button onclick="restoreDefaultFormats(homestuckFormats)">Restore Homestuck accurate formats</button>
       </p>
       <div id="userFormats" class="formatInteract"></div>
       <p>
