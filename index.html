@@ -29,7 +29,11 @@ Logs can be manually created with %LOG%
 You can also use pesterlog text outside of logs $TT like so.$- And then exited like this.
     </textarea>
     <div id="outputs">
-      <div id="outputHeader" style="display: none;">Display style: <select name="showWork" id="showWork"></select></div>
+      <div id="outputHeader">Display style: <select name="showWork" id="showWork" onchange="showWork()">
+        <option value="workskin">Archive Of Our Own</option>
+        <option value="slide">MS Paint Fan Adventures</option>
+        <option value="discord">Discord</option>
+      </select></div>
       <div id="works">
         <div id="workskin" class="workskin"></div>
         <div id="slide" class="mspfa" style="display: none;"></div>
@@ -154,17 +158,38 @@ You can also use pesterlog text outside of logs $TT like so.$- And then exited l
 
     <div id="copy">
       <h1>Copy Html</h1>
-      <p>
-        <div id="skinStatus">Work is compatible</div>
-      </p>
-      <p style="text-align: center;">
-        <b>Html</b> <br>
-        <textarea name="finalHtml" id="finalHtml" cols="70" rows="10" style="margin: auto; display: block;"></textarea>
-      </p>
-      <p style="text-align: center;">
-        <b>CSS</b> <br>
-        <textarea name="finalCSS" id="finalCSS" cols="70" rows="10" style="margin: auto; display: block;"></textarea>
-      </p>
+      <div id="workskin-out">
+        <h2>Selected style: Archive of our own</h2>
+        <p>
+          <div id="skinStatus">Work is compatible</div>
+        </p>
+        <p style="text-align: center;">
+          <b>Html</b> <br>
+          <textarea name="finalAo3Html" id="finalAo3Html" cols="70" rows="10" style="margin: auto; display: block;"></textarea>
+        </p>
+        <p style="text-align: center;" id="ao3CssCopy">
+          <b>CSS</b> <br>
+          <textarea name="finalAo3CSS" id="finalAo3CSS" cols="70" rows="10" style="margin: auto; display: block;"></textarea>
+        </p>
+      </div>
+      <div id="slide-out">
+        <h2>Selected style: MS Paint Adventures</h2>
+        <p style="text-align: center;">
+          <b>Html</b> <br>
+          <textarea name="finalMspfaHtml" id="finalMspfaHtml" cols="70" rows="10" style="margin: auto; display: block;"></textarea>
+        </p>
+        <p style="text-align: center;" id="ao3CssCopy">
+          <b>CSS</b> <br>
+          <textarea name="finalMspfaCSS" id="finalMspfaCSS" cols="70" rows="10" style="margin: auto; display: block;"></textarea>
+        </p>
+      </div>
+      <div id="discord-out">
+        <h2>Selected style: Discord</h2>
+        <p style="text-align: center;">
+          <b>Text</b> <br>
+          <textarea name="finalDiscord" id="finalDiscord" cols="70" rows="10" style="margin: auto; display: block;"></textarea>
+        </p>
+      </div>
     </div>
 
   </div>

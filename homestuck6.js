@@ -173,7 +173,11 @@ homestuckFormats.jasprose = {
 
 let userFormats = localStorage.getItem('userFormats') ? JSON.parse(localStorage.getItem('userFormats')) : defultFormats
 let discordFormats = {}
-let compatibleKeys = Object.keys(defultFormats)
+
+let compatibleKeys = []
+for (const [spanClass, format] of Object.entries(defultFormats)) {
+  if (!format.dualCol) compatibleKeys.push(spanClass)
+}
 
 // Regex
 const regHandle = /^[^\s]*?:/
@@ -203,17 +207,42 @@ const ao3CSS = `#workskin .block {
   color: #000000;
 }`
 
+const discordReplaces = {
+  normal: "[0;30m",
+  white: "[0;37m",
+  red: "[0;31m",
+  yellow: "[0;33m",
+  green: "[0;32m",
+  cyan: "[0;36m",
+  blue: "[0;34m",
+  pink: "[0;35m",
+  grey: "[0;30m",
+}
+
 // Convert Work styles
 const workStyleFunctions = [
   // Mspfa
   output => {
     const mspfa = document.getElementById("slide")
     mspfa.innerHTML = output.replace(regParaBlock, `<div class="spoiler"><div>$1</div></div><br>`).replace(regParagraph, `$1 <br>`)
+
+    document.getElementById("finalMspfaHtml").value = mspfa.innerHTML.replace(/<br>/g, "").replace(/^\s+</gm, "<")
+    document.getElementById("finalMspfaCSS").value = document.getElementById("genMSPFAStyle").innerHTML
   },
   // Discord
   output => {
     const discord = document.getElementById("discord")
-    discord.innerHTML = output.replace(/<span class="(.+?)"/g, (match, p1) => `<span class="${discordFormats[p1] ? discordFormats[p1] : "normal"}"`)
+    discord.innerHTML = output.replace(regParaBlock, (match, p1) => {
+      return `<p class="block"><span class="pesterlog">${
+        p1.replace(/<span class="(.+?)"/g, (match, p1) => `<span class="${discordFormats[p1] ? discordFormats[p1] : "normal"}"`)
+      }</span></p>`
+    })
+
+    document.getElementById("finalDiscord").value = discord.innerHTML.replace(regParaBlock, (match, p1) => {
+      return `\`\`\`ansi${p1.replace(/(<\/span>|<br>)/g, "").replace(/<span class="(.+?)">/g, (match, p1) => {
+        return discordReplaces[p1] ? discordReplaces[p1] : ""
+      })}\`\`\`` 
+    }).replace(/^\s+</gm, "<")
   },
 ]
 
@@ -252,6 +281,15 @@ const transcribe = () => {
   let usedFormats = []
   let output = ""
 
+  let add2usedFormats = (spanClass, format) => {
+    if (format.dualCol) {
+      if (!usedFormats.includes(format.colorClasses[0])) usedFormats.push(format.colorClasses[0])
+      if (!usedFormats.includes(format.colorClasses[1])) usedFormats.push(format.colorClasses[1])
+    } else {
+      if (!usedFormats.includes(spanClass)) usedFormats.push(spanClass)
+    }
+  }
+
   allParagraphs.forEach(p => {
     let paragraphText = ""
     let isParagraphBlock = false
@@ -266,7 +304,6 @@ const transcribe = () => {
 
         spans.forEach(key => {
           const chara = key.slice(1)
-          console.log(chara)
 
           for (const [spanClass, format] of Object.entries(userFormats)) {
             format.names.forEach(formatHandle => {
@@ -280,7 +317,7 @@ const transcribe = () => {
                 line = line.replace(key + " ", `<span class="${spanClass}-plain">`) + "</span>"
 
                 // Add spanclass to format
-                if (!usedFormats.includes(spanClass + "-plain")) usedFormats.push(spanClass + "-plain")
+                add2usedFormats(spanClass + "-plain", format)
               }
             })
           }
@@ -314,7 +351,7 @@ const transcribe = () => {
               foundHandle = true
 
               // Add spanclass to format
-              if (!usedFormats.includes(spanClass)) usedFormats.push(spanClass)
+              add2usedFormats(spanClass, format)
 
             }
           })
@@ -341,7 +378,7 @@ const transcribe = () => {
                 isParagraphBlock = !isParagraphBlock ? doAutoLog : isParagraphBlock
                 
                 // Add spanclass to format
-                if (!usedFormats.includes(spanClass)) usedFormats.push(spanClass)
+                add2usedFormats(spanClass, format)
 
               }
             })
@@ -372,8 +409,8 @@ const transcribe = () => {
   
   outputDiv.innerHTML = output
 
-  document.getElementById("finalHtml").value = outputDiv.innerHTML
-  document.getElementById("finalCSS").innerText = document.getElementById("genAo3Style").innerHTML
+  document.getElementById("finalAo3Html").value = outputDiv.innerHTML
+  document.getElementById("finalAo3CSS").value = document.getElementById("genAo3Style").innerHTML
 
   setSkinStatus(usedFormats)
   convertWork(output)
@@ -382,6 +419,7 @@ const transcribe = () => {
 
 const setSkinStatus = usedFormats => {
   const skinStatus = document.getElementById("skinStatus")
+  const ao3CssCopy = document.getElementById("ao3CssCopy")
 
   let isCompatible = true
   usedFormats.forEach(e => {
@@ -391,9 +429,12 @@ const setSkinStatus = usedFormats => {
   if (isCompatible) {
     skinStatus.innerHTML = "This work is compatible with AO3's homestuck workskin."
     skinStatus.className = "green"
+    ao3CssCopy.style.display = "none"
+    
   } else {
     skinStatus.innerHTML = "This work is not compatible with AO3's homestuck workskin. You will have to create a custom workskin using the generated CSS."
     skinStatus.className = "red"
+    ao3CssCopy.style.display = "block"
   }
 }
 
@@ -611,12 +652,12 @@ const genCSSstyle = () => {
   for (const [spanClass, format] of Object.entries(userFormats)) {
     // CSS
     genAo3Style.innerHTML += `
-    #workskin .${spanClass} { font-size: 14px; font-weight: bold; font-family: courier, monospace; color: ${format.color}; }
-    #workskin .${spanClass}-plain { color: ${format.color}; }
+#workskin .${spanClass} { font-size: 14px; font-weight: bold; font-family: courier, monospace; color: ${format.color}; }
+#workskin .${spanClass}-plain { color: ${format.color}; }
     `
     genMSPFAStyle.innerHTML += `
-    #slide .${spanClass} { color: ${format.color} }
-    #slide .${spanClass}-plain { color: ${format.color}; }
+#slide .${spanClass} { color: ${format.color} }
+#slide .${spanClass}-plain { color: ${format.color}; }
     `
     
     // Discord    
@@ -648,6 +689,13 @@ const importJson = () => {
   } catch (e) { }
 }
 
+const showWork = () => {
+  document.querySelectorAll("#works > *, #copy > div").forEach(e => { e.style.display = "none"})
+  document.getElementById(document.getElementById("showWork").value).style.display = "block"
+  document.getElementById(document.getElementById("showWork").value + "-out").style.display = "block"
+}
+
 genFormatEditor()
 genNewUserFormat()
+showWork()
 transcribe()

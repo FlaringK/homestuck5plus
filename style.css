@@ -29,7 +29,7 @@ body {
 }
 
 #outputHeader {
-  padding: 0.2em;
+  padding: 0.2em .5em;
   border-bottom: 1px solid #000;
   font-family: Arial, Helvetica, sans-serif;
   position: sticky;
