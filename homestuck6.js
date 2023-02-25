@@ -363,9 +363,9 @@ const transcribe = () => {
     })
 
     if (isParagraphBlock) {
-      output += `<p class="block"><span class="pesterlog">${paragraphText}</span></p>\n\n`
+      output += `<p class="block"><span class="pesterlog">\n${paragraphText}</span></p>\n\n`
     } else {
-      output += `<p>${paragraphText}</p>\n\n`
+      output += `<p>\n${paragraphText}</p>\n\n`
     }
 
   })
