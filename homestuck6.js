@@ -576,6 +576,7 @@ const genCSSstyle = () => {
   genAo3Style.innerHTML = ao3CSS
   
   const genMSPFAStyle = document.getElementById("genMSPFAStyle")
+  genMSPFAStyle.innerHTML = ""
 
   // Discord
   const discordCols = {
