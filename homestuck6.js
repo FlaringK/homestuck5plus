@@ -127,7 +127,7 @@ const defultFormats = {
   
   white: {
     color: "#ffffff",
-    names: ["Doc"],
+    names: ["Doc", "Scratch"],
   },
 
   dad: {
@@ -137,7 +137,7 @@ const defultFormats = {
 
   black: {
     color: "#000000",
-    names: [],
+    names: ["Hussie"],
   },
   felt: {
     color: "#2ed73a",
@@ -238,11 +238,11 @@ const workStyleFunctions = [
       }</span></p>`
     })
 
-    document.getElementById("finalDiscord").value = discord.innerHTML.replace(regParaBlock, (match, p1) => {
-      return `\`\`\`ansi${p1.replace(/(<\/span>|<br>)/g, "").replace(/<span class="(.+?)">/g, (match, p1) => {
+    document.getElementById("finalDiscord").value = discord.innerHTML.replace(/^\s+</gm, "<").replace(regParaBlock, (match, p1) => {
+      return `\`\`\`ansi${p1.replace(/<\/span>/g, "[0;37m").replace(/<br>/g, "").replace(/<span class="(.+?)">/g, (match, p1) => {
         return discordReplaces[p1] ? discordReplaces[p1] : ""
       })}\`\`\`` 
-    }).replace(/^\s+</gm, "<")
+    })
   },
 ]
 
