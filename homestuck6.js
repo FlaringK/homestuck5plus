@@ -161,14 +161,14 @@ const defultFormats = {
 }
 
 let homestuckFormats = JSON.parse(JSON.stringify(defultFormats))
-homestuckFormats.japser = {
+homestuckFormats.jasper = {
   color: "#f141ef",
-  names: ["jasper"],
+  names: ["jasper", "jaspersprite"],
 }
 homestuckFormats.jasprose = {
   dualCol: true,
   names: ["Jasprosesprite^2", "Jazz"],
-  colorClasses: ["japser", "rose"]
+  colorClasses: ["jasper", "rose"]
 }
 
 let userFormats = localStorage.getItem('userFormats') ? JSON.parse(localStorage.getItem('userFormats')) : defultFormats
@@ -226,7 +226,7 @@ const workStyleFunctions = [
     const mspfa = document.getElementById("slide")
     mspfa.innerHTML = output.replace(regParaBlock, `<div class="spoiler"><div>$1</div></div><br>`).replace(regParagraph, `$1 <br>`)
 
-    document.getElementById("finalMspfaHtml").value = mspfa.innerHTML.replace(/<br>/g, "").replace(/^\s+</gm, "<")
+    document.getElementById("finalMspfaHtml").value = mspfa.innerHTML.replace(/<br>/g, "").replace(/^\s+/gm, "")
     document.getElementById("finalMspfaCSS").value = document.getElementById("genMSPFAStyle").innerHTML
   },
   // Discord
@@ -242,9 +242,9 @@ const workStyleFunctions = [
       return `\`\`\`ansi${p1.replace(/<\/span>/g, "[0;37m").replace(/<br>/g, "").replace(/<span class="(.+?)">/g, (match, p1) => {
         return discordReplaces[p1] ? discordReplaces[p1] : ""
       })}\`\`\`` 
-    }).replace(regParagraph, (match, p1) => {
+    }).replace(/```\n/g, "```").replace(regParagraph, (match, p1) => {
       return p1.replace(/<span.+?>|<\/span>/g, "`").replace(/<br>/, "")
-    })
+    }).replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&")
   },
 ]
 
@@ -346,10 +346,10 @@ const transcribe = () => {
 
               // If Dual colour surround handle with colour
               if ("dualCol" in format) {
-                line = line.replace(lineHandle + ":", `<span class="${format.colorClasses[0]}">${lineHandle}:</span>`)
+                line = line.replace(lineHandle + ":", `${lineHandle}:</span><span class="${format.colorClasses[1]}">`)
               }
 
-              line = `<span class="${"dualCol" in format ? format.colorClasses[1] : spanClass}">${line}</span>`
+              line = `<span class="${"dualCol" in format ? format.colorClasses[0] : spanClass}">${line}</span>`
               foundHandle = true
 
               // Add spanclass to format
