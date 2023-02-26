@@ -208,7 +208,7 @@ const ao3CSS = `#workskin .block {
 }`
 
 const discordReplaces = {
-  normal: "[0;30m",
+  normal: "[0;29m",
   white: "[0;37m",
   red: "[0;31m",
   yellow: "[0;33m",
@@ -226,11 +226,14 @@ const workStyleFunctions = [
     const mspfa = document.getElementById("slide")
     mspfa.innerHTML = output.replace(regParaBlock, `<div class="spoiler"><div>$1</div></div><br>`).replace(regParagraph, `$1 <br>`)
 
-    document.getElementById("finalMspfaHtml").value = mspfa.innerHTML.replace(/<br>/g, "").replace(/^\s+/gm, "")
-    document.getElementById("finalMspfaCSS").value = document.getElementById("genMSPFAStyle").innerHTML
+    document.getElementById("finalMspfaHtml").value = mspfa.innerHTML.replace(/<span class="(.+?)">/g, (match, p1) => {
+      return `[color=${userFormats[p1.replace("-plain", "")]}]`
+    }).replace(/<\/span>/g, "[/color]").replace(/<br>/g, "").replace(/^\s+/gm, "")
+    // document.getElementById("finalMspfaCSS").value = document.getElementById("genMSPFAStyle").innerHTML
   },
   // Discord
   output => {
+    
     const discord = document.getElementById("discord")
     discord.innerHTML = output.replace(regParaBlock, (match, p1) => {
       return `<p class="block"><span class="pesterlog">${
@@ -239,7 +242,7 @@ const workStyleFunctions = [
     })
 
     document.getElementById("finalDiscord").value = discord.innerHTML.replace(/^\s+/gm, "").replace(regParaBlock, (match, p1) => {
-      return `\`\`\`ansi${p1.replace(/<\/span>/g, "[0;37m").replace(/<br>/g, "").replace(/<span class="(.+?)">/g, (match, p1) => {
+      return `\`\`\`ansi${p1.replace(/<\/span>/g, "[0;29m").replace(/<br>/g, "").replace(/<span class="(.+?)">/g, (match, p1) => {
         return discordReplaces[p1] ? discordReplaces[p1] : ""
       })}\`\`\`` 
     }).replace(/```\n/g, "```").replace(regParagraph, (match, p1) => {
@@ -677,7 +680,6 @@ const genCSSstyle = () => {
       }
     }
     
-
   }
 
   console.log(discordFormats)

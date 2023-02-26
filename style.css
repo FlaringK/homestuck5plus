@@ -1,3 +1,8 @@
+@font-face {
+  font-family: fontstuck;
+  src: url(./fontstuck-extended.ttf);
+}
+
 body {
   margin: 0;
 }
@@ -26,10 +31,6 @@ body {
 
 #textWrap {
   display: flex;
-}
-
-#outputs span {
-  /* white-space: pre-wrap; */
 }
 
 #outputHeader {
@@ -110,11 +111,25 @@ body {
 #discord .block .blue { color: #268bd2 }
 #discord .block .pink { color: #d33682 }
 #discord .block .grey { color: #4f545c }
+#discord .block .normal { color: #dcddde }
 
 /* Options Hud */
 
+#title {
+  font-family: fontstuck;
+  font-size: 3em;
+  text-shadow: #000 0.05em 0.05em 0;
+  text-align: center;
+}
+
 #options {
   padding: 0.25em;
+  display: flex;
+  justify-content: space-between;
+}
+
+#options > * {
+  width: 30%;
 }
 
 #options button {
@@ -138,7 +153,7 @@ body {
 #helpBtn { --col: #0715cd; }
 #aboutBtn { --col: #b536da; }
 #formatsBtn { --col: #e00707; }
-#copyBtn { --col: #4ac925; float: right;}
+#copyBtn { --col: #4ac925; margin-left: auto; display: block;}
 
 /* Popups */
 

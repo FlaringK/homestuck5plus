@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Homestuck 5+</title>
+  <title>Homestuck5plus</title>
 
-  <meta content="Homestuck 5+" property="og:title" />
-  <meta content="Homestuck 5+ is a tool to format Homestuck style dialogue. Entering homestuck style dialogue in the left text area will generate formatted homestuck dialogue in the right area." property="og:description" />
+  <meta content="Homestuck5plus" property="og:title" />
+  <meta content="Homestuck5plus is a tool to format Homestuck style dialogue. Entering homestuck style dialogue in the left text area will generate formatted homestuck dialogue in the right area." property="og:description" />
   <meta content="https://flaringk.github.io/homestuck5plus/" property="og:url" />
   <meta content="#0715cd" data-react-helmet="true" name="theme-color" />
 
@@ -94,10 +94,17 @@ That's what I'VE been saying!!!
     </div>
   </div>
   <div id="options">
-    <button onclick="openPopup('help')" id="helpBtn">Help!</button>
-    <button onclick="openPopup('about')" id="aboutBtn">About</button>
-    <button onclick="openPopup('format')" id="formatsBtn">Edit Formats</button>
-    <button onclick="openPopup('copy')" id="copyBtn">Copy Html & CSS</button>
+    <div>
+      <button onclick="openPopup('help')" id="helpBtn">Help!</button>
+      <button onclick="openPopup('about')" id="aboutBtn">About</button>
+      <button onclick="openPopup('format')" id="formatsBtn">Edit Formats</button>
+    </div>
+    <div id="title">
+      <span style="color: #2ed73a">Homestuck5</span><span style="color: #e00707">plus</span>
+    </div>
+    <div style="text-align: left;">
+      <button onclick="openPopup('copy')" id="copyBtn">Copy Html & CSS</button>
+    </div>
   </div>
 
   <div id="popup" onclick="closePopup()">
@@ -225,7 +232,7 @@ That's what I'VE been saying!!!
         </p>
       </div>
       <div id="slide-out">
-        <h2>Selected style: MS Paint Adventures</h2>
+        <h2>Selected style: MS Paint Fan Adventures</h2>
         <p style="text-align: center;">
           <b>Html</b> <br>
           <textarea name="finalMspfaHtml" id="finalMspfaHtml" cols="70" rows="10" style="margin: auto; display: block;"></textarea>
