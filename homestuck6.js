@@ -70,7 +70,7 @@ const defultFormats = {
   },
   nepeta: {
     color: "#416600",
-    names: ["nepeta", "AC", "Muelin"],
+    names: ["nepeta", "AC", "Meulin"],
     chum: "arsenicCatnip"
   },
   kanaya: {
