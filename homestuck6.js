@@ -238,10 +238,12 @@ const workStyleFunctions = [
       }</span></p>`
     })
 
-    document.getElementById("finalDiscord").value = discord.innerHTML.replace(/^\s+</gm, "<").replace(regParaBlock, (match, p1) => {
+    document.getElementById("finalDiscord").value = discord.innerHTML.replace(/^\s+/gm, "").replace(regParaBlock, (match, p1) => {
       return `\`\`\`ansi${p1.replace(/<\/span>/g, "[0;37m").replace(/<br>/g, "").replace(/<span class="(.+?)">/g, (match, p1) => {
         return discordReplaces[p1] ? discordReplaces[p1] : ""
       })}\`\`\`` 
+    }).replace(regParagraph, (match, p1) => {
+      return p1.replace(/<span.+?>|<\/span>/g, "`").replace(/<br>/, "")
     })
   },
 ]
