@@ -1,7 +1,7 @@
 const defultFormats = {
   john: {
     color: "#0715cd",
-    names: ["John", "June", "EB", "Tavrisprite"],
+    names: ["John", "June", "EB"],
     chum: "ectoBiologist"
   },
   rose: {
@@ -28,7 +28,7 @@ const defultFormats = {
   },
   jake: {
     color: "#1f9400",
-    names: ["Jake", "GT", "Jadesprite"],
+    names: ["Jake", "GT-", "Jadesprite"],
     chum: "golgothasTerror"
   },
   roxy: {
@@ -147,6 +147,12 @@ const defultFormats = {
     color: "#678900",
     names: [],
   },
+
+  tavrisprite: {
+    color: "#0715cd",
+    names: ["Tavrisprite", "GT"],
+    chum: "ghostyTrickster"
+  }, 
 
   jasprose: {
     dualCol: true,
