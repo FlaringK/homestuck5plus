@@ -43,7 +43,7 @@ const defultFormats = {
   },
   AR: {
     color: "#e00707",
-    names: ["AR", "TT--", "arquiusprite"],
+    names: ["HAL", "AR", "TT--", "arquiusprite"],
     chum: "timaeusTestified"
   },
 
