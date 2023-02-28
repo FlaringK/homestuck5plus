@@ -228,7 +228,7 @@ const workStyleFunctions = [
 
     document.getElementById("finalMspfaHtml").value = mspfa.innerHTML.replace(/<span class="(.+?)">/g, (match, p1) => {
       return `[color=${userFormats[p1.replace("-plain", "")].color}]`
-    }).replace(/<\/span>/g, "[/color]").replace(/<br>/g, "").replace(/^\s+/gm, "").replace("\n", "")
+    }).replace(/<\/span>/g, "[/color]").replace(/<br>/g, "").replace(/^\s+/gm, "").replace(/^\n/, "")
   },
   // Discord
   output => {
@@ -246,7 +246,7 @@ const workStyleFunctions = [
       })}\`\`\`` 
     }).replace(/```\n/g, "```").replace(regParagraph, (match, p1) => {
       return p1.replace(/<span.+?>|<\/span>/g, "`").replace(/<br>/, "")
-    }).replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&").replace("\n", "")
+    }).replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&").replace(/^\n/, "")
   },
 ]
 
