@@ -308,7 +308,7 @@ const transcribe = () => {
       let line = text.trim()
       let doLineBreak = true
 
-      // == Add spans into text ==
+      // == Add spans into text $EB, $- ==
       if (regCharSpans.test(line)) {
         const spans = line.match(regCharSpans)
 
@@ -318,13 +318,25 @@ const transcribe = () => {
           for (const [spanClass, format] of Object.entries(userFormats)) {
             format.names.forEach(formatHandle => {
               if (formatHandle.toLowerCase() == chara.toLowerCase()) {
-                line = line.replace(key + " ", `<span class="${spanClass}">`) + "</span>"
+                line = line.replace(key + " ", `<span class="${spanClass}">`)
+
+                if (line.includes("$-")) {
+                  line = line.replace("$-", "</span>")
+                } else {
+                  line = line + "</span>"
+                }
 
                 // Add spanclass to format
                 if (!usedFormats.includes(spanClass)) usedFormats.push(spanClass)
               }
               if ("$" + formatHandle.toLowerCase() == chara.toLowerCase()) {
-                line = line.replace(key + " ", `<span class="${spanClass}-plain">`) + "</span>"
+                line = line.replace(key + " ", `<span class="${spanClass}-plain">`)
+
+                if (line.includes("$-")) {
+                  line = line.replace("$-", "</span>")
+                } else {
+                  line = line + "</span>"
+                }
 
                 // Add spanclass to format
                 add2usedFormats(spanClass + "-plain", format)
@@ -334,7 +346,7 @@ const transcribe = () => {
 
         })
       }
-      line = line.replace(/\$-/g, "</span>")
+      line = line.replace(/\$-/g, "")
 
       // == If line starts with a handle (EB:), format it ==
       if (regHandle.test(line)) {
