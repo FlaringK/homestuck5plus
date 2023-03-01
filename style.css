@@ -119,6 +119,26 @@ body {
 
 .discord { background-color: #36393f; }
 
+#tumblr {
+  font-family: "Favorit", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
+  background-color: white;
+  margin: .5em;
+  padding: 20px;
+  border-radius: 3px;
+}
+
+#tumblr p { margin: .938rem 0; }
+#tumblr p:first-child { margin-top: 0; }
+#tumblr p:last-child { margin-bottom: 0; }
+
+#tumblr .npf_chat {
+  font-family: Courier, monospace;
+}
+
+.tumblr {
+  background: #001935;
+}
+
 /* Options Hud */
 
 #title {
@@ -297,4 +317,11 @@ body {
 
 #skinStatus.red {
   background: lightcoral;
+}
+
+.tumblr-tutorial {
+  width: 60%;
+  display: block;
+  margin: 0.5em auto;
+  border-radius: 10px;
 }

@@ -234,7 +234,7 @@ const workStyleFunctions = [
 
     document.getElementById("finalMspfaHtml").value = mspfa.innerHTML.replace(/<span class="(.+?)">/g, (match, p1) => {
       return `[color=${userFormats[p1.replace("-plain", "")].color}]`
-    }).replace(/<\/span>/g, "[/color]").replace(/<br>/g, "").replace(/^\s+/gm, "").replace(/^\n/, "")
+    }).replace(/<\/span>/g, "[/color]").replace(/<div class="spoiler"><div>((.|\n)*?)<\/div><\/div><br>/g, "[spoiler]$1[/spoiler]").replace(/<br>/g, "").replace(/^\s+/gm, "").replace(/^\n/, "")
   },
   // Discord
   output => {
@@ -254,6 +254,15 @@ const workStyleFunctions = [
       return p1.replace(/<span.+?>|<\/span>/g, "`").replace(/<br>/, "")
     }).replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&").replace(/^\n/, "")
   },
+  // Tumblr
+  output => {
+    const tumblr = document.getElementById("tumblr")
+    tumblr.innerHTML = output.replace(regParaBlock, `<p class="npf_chat"><b>$1</b></p>`).replace(/<span class="(.+?)">/g, (match, p1) => {
+      return `<span style="color: ${userFormats[p1.replace("-plain", "")].color}">`
+    }).replace(/^\s+/gm, "")
+
+    document.getElementById("finalTumblr").value = tumblr.innerHTML
+  }
 ]
 
 // Transcribe Input
