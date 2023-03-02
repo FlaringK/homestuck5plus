@@ -234,7 +234,7 @@ const workStyleFunctions = [
     mspfa.innerHTML = output.replace(regParaBlock, `<div class="spoiler"><div>$1</div></div><br>`).replace(regParagraph, `$1 <br>`)
 
     document.getElementById("finalMspfaHtml").value = mspfa.innerHTML.replace(/<span class="(.+?)">/g, (match, p1) => {
-      return `[color=${userFormats[p1.replace("-plain", "")]}]`
+      return `[color=${userFormats[p1.replace("-plain", "")].color}]`
     }).replace(/<\/span>/g, "[/color]").replace(/<div class="spoiler"><div>((.|\n)*?)<\/div><\/div><br>/g, "[spoiler]$1[/spoiler]").replace(/<br>/g, "").replace(/^\s+/gm, "").replace(/^\n/, "")
   },
   // Discord
