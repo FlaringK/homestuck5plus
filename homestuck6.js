@@ -135,10 +135,6 @@ const defultFormats = {
     names: ["Dad"],
   },
 
-  black: {
-    color: "#000000",
-    names: ["Hussie"],
-  },
   felt: {
     color: "#2ed73a",
     names: ["Caliborn-"],
@@ -153,6 +149,11 @@ const defultFormats = {
     names: ["Tavrisprite", "GT"],
     chum: "ghostyTrickster"
   }, 
+
+  black: {
+    color: "#000000",
+    names: ["Hussie"],
+  },
 
   jasprose: {
     dualCol: true,
@@ -233,7 +234,7 @@ const workStyleFunctions = [
     mspfa.innerHTML = output.replace(regParaBlock, `<div class="spoiler"><div>$1</div></div><br>`).replace(regParagraph, `$1 <br>`)
 
     document.getElementById("finalMspfaHtml").value = mspfa.innerHTML.replace(/<span class="(.+?)">/g, (match, p1) => {
-      return `[color=${userFormats[p1.replace("-plain", "")].color}]`
+      return `[color=${userFormats[p1.replace("-plain", "")]}]`
     }).replace(/<\/span>/g, "[/color]").replace(/<div class="spoiler"><div>((.|\n)*?)<\/div><\/div><br>/g, "[spoiler]$1[/spoiler]").replace(/<br>/g, "").replace(/^\s+/gm, "").replace(/^\n/, "")
   },
   // Discord
@@ -499,6 +500,14 @@ closePopup()
 const formatHUD = document.getElementById("userFormats")
 
 const genFormatEditor = () => {
+  // Gen options
+  let optionsClasses = ""
+  for (const [spanClass, format] of Object.entries(userFormats)) {
+    if (!("dualCol" in format)) {
+      optionsClasses += `<option value="${spanClass}">${spanClass}</option>`
+    }
+  }
+
   formatHUD.innerHTML = ""
   for (const [spanClass, format] of Object.entries(userFormats)) {
 
@@ -516,10 +525,15 @@ const genFormatEditor = () => {
       <div class="collapseHead" onclick="toggleCollapse('${spanClass}')">
         <span style="color: ${userFormats[format.colorClasses[0]].color}">Dualclass: </span>
         <span style="color: ${userFormats[format.colorClasses[1]].color}">${spanClass}</span>
+        <button class="formatBin" onclick="deleteFormat('${spanClass}')">🗑️</button>
       </div>
       <div class="collapse closed">
         <div class="formatNames"><div>Names:</div> <ul> ${nameFormats} </ul></div>
-        <div>Color Classes: <input type="text" class="colClass" value="${format.colorClasses[0]}"> <input type="text" class="colClass" value="${format.colorClasses[1]}"></div>
+        <div>
+          Color Classes: 
+          <select onchange="genNewUserFormat(); genFormatEditor()" class="colClass">${optionsClasses.replace(`value="${format.colorClasses[0]}"`, `value="${format.colorClasses[0]}" selected`)}</select>
+          <select onchange="genNewUserFormat(); genFormatEditor()" class="colClass">${optionsClasses.replace(`value="${format.colorClasses[1]}"`, `value="${format.colorClasses[1]}" selected`)}</select>
+        </div>
       </div>
     </div>`
 
@@ -527,7 +541,9 @@ const genFormatEditor = () => {
   
       // Add edit module
       formatHUD.innerHTML += `<div class="format" data-format="${spanClass}" data-color="${format.color}">
-        <div class="collapseHead" style="color: ${format.color}" onclick="toggleCollapse('${spanClass}')">${format.color.toUpperCase()}: ${spanClass} <button class="formatBin" onclick="deleteFormat('${spanClass}')">🗑️</button> </div>
+        <div class="collapseHead" style="color: ${format.color}" onclick="toggleCollapse('${spanClass}')">${format.color.toUpperCase()}: ${spanClass} 
+          ${spanClass == "black" ? "" : `<button class="formatBin" onclick="deleteFormat('${spanClass}')">🗑️</button>`}
+        </div>
         <div class="collapse closed">
           <div class="formatNames"><div>Names:</div> <ul> ${nameFormats} </ul></div>
           <div>ChumHandle: <input type="text" class="chum" value="${format.chum ? format.chum : ""}" style="float: right" onchange="genNewUserFormat()"></div>
@@ -606,6 +622,7 @@ const updateUserFormat = newUserFormat => {
 
   document.getElementById("userFormatJson").value = JSON.stringify(userFormats)
 
+  genNewDualFormat()
   transcribe()
 }
 
@@ -724,6 +741,39 @@ const showWork = () => {
   document.getElementById(document.getElementById("showWork").value).style.display = "block"
   document.getElementById(document.getElementById("showWork").value + "-out").style.display = "block"
   document.getElementById("outputs").className = document.getElementById("showWork").value
+}
+
+const genNewDualFormat = () => {
+  let optionsClasses = ""
+  for (const [spanClass, format] of Object.entries(userFormats)) {
+    if (!("dualCol" in format)) {
+      optionsClasses += `<option value="${spanClass}">${spanClass}</option>`
+    }
+  }
+
+  document.getElementById("dualFormatHandle").innerHTML = optionsClasses
+  document.getElementById("dualFormatText").innerHTML = optionsClasses
+}
+
+const addNewDualFormat = () => {
+  const className = document.getElementById("newDualFormatName")
+  const color1 = document.getElementById("dualFormatHandle").value
+  const color2 = document.getElementById("dualFormatText").value
+
+  if (!className.value) return
+
+  let newUserFormat = JSON.parse(JSON.stringify(userFormats))
+  newUserFormat[className.value] = {
+    dualCol: true,
+    names: [],
+    colorClasses: [color1, color2]
+  }
+
+  updateUserFormat(newUserFormat)
+  genFormatEditor()
+
+  genNewDualFormat()
+  className.value = ""
 }
 
 genFormatEditor()

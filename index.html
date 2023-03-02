@@ -210,8 +210,15 @@ That's what I'VE been saying!!!
       <p><b>Add Formats</b> <br> New formats may not be included in AO3's standard homstuck workskin, and will require a custom workskin to be compatible. The format class name will be the html class given to the span.</p>
       <div class="formatInteract">
         <label for="newFormatName">Format Class Name</label> <input type="text" name="newFormatName" id="newFormatName"> <br>
-        <label for="newFormatCol">Format Color</label> <input type="color" name="newFormatCol" id="newFormatCol"> <br>
+        <label for="newFormatCol">Format Color</label> <input type="color" name="newFormatCol" id="newFormatCol"> or <input type="text" onchange="document.getElementById(`newFormatCol`).value = this.value" placeholder="#000000"> <br>
         <button onclick="addNewFormat()">Add new format</button>
+      </div>
+      <p><b>Add dual format</b> <br> Dual formats will format pesterlog handles as diffrent colours then their messages. Dual formats can only be composed of existing formats, so you will have to add each colour of a new dual format before combining them below.</p>
+      <div class="formatInteract">
+        <label for="newDualFormatName">Dual Format Class Name</label> <input type="text" name="newDualFormatName" id="newDualFormatName"> <br>
+        <label for="newFormatName">Dual format Handle</label> <select name="dualFormatHandle" id="dualFormatHandle"></select> <br>
+        <label for="newFormatCol">Dual format Text</label> <select name="dualFormatText" id="dualFormatText"></select> <br>
+        <button onclick="addNewDualFormat()">Add new dual format</button>
       </div>
       <p><b>Import Formats</b> <br> Formats will automatically be saved in local storage when they are changed, however you can import a group of formats by pasting in it's JSON string below.</p>
       <p>
