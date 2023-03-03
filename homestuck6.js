@@ -263,6 +263,13 @@ const workStyleFunctions = [
     }).replace(/^\s+/gm, "")
 
     document.getElementById("finalTumblr").value = tumblr.innerHTML
+  },
+  // Tumblr
+  output => {
+    const gdocs = document.getElementById("gdocs")
+    gdocs.innerHTML = output.replace(/^\s+/gm, "").replace(/<p class="block"><span class="pesterlog">\n((.|\n)*?)\n<\/span><\/p>/g, `<table class="block"><tr><td><span class="pesterlog">$1</span></td></tr></table>`).replace(/-plain"/g, " plain\"")
+
+    document.getElementById("finalGdocs").innerHTML = gdocs.innerHTML.replace(/<br>/g, "")
   }
 ]
 
@@ -664,8 +671,8 @@ const genCSSstyle = () => {
   const genAo3Style = document.getElementById("genAo3Style")
   genAo3Style.innerHTML = ao3CSS
   
-  const genMSPFAStyle = document.getElementById("genMSPFAStyle")
-  genMSPFAStyle.innerHTML = ""
+  const genGdocsStyle = document.getElementById("genGdocsStyle")
+  genGdocsStyle.innerHTML = ""
 
   // Discord
   const discordCols = {
@@ -703,9 +710,9 @@ const genCSSstyle = () => {
 #workskin .${spanClass} { font-size: 14px; font-weight: bold; font-family: courier, monospace; color: ${format.color}; }
 #workskin .${spanClass}-plain { color: ${format.color}; }
     `
-    genMSPFAStyle.innerHTML += `
-#slide .${spanClass} { color: ${format.color} }
-#slide .${spanClass}-plain { color: ${format.color}; }
+    genGdocsStyle.innerHTML += `
+#gdocs .${spanClass}, #finalGdocs .${spanClass} { color: ${format.color} }
+#gdocs .${spanClass}-plain, #finalGdocs .${spanClass}-plain { color: ${format.color}; }
     `
     
     // Discord    

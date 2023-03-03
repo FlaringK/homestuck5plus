@@ -139,6 +139,35 @@ body {
   background: #001935;
 }
 
+#gdocs {
+  padding: 0.5em 1em;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#gdocs .block {
+  width: 650px;
+  margin-left: auto;
+  margin-right: auto;
+  background: #eee;
+  border: 1px dashed gray;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 35px;
+  padding-right: 35px;
+}
+
+#gdocs .pesterlog {
+  font-size: 14px;
+  font-weight: bold;
+  font-family: courier, monospace;
+  color: #000000;
+  background: #eee;
+}
+
+#gdocs table + table {
+  margin-top: 1em;
+}
+
 /* Options Hud */
 
 #title {
@@ -324,4 +353,46 @@ body {
   display: block;
   margin: 0.5em auto;
   border-radius: 10px;
+}
+
+#finalGdocs {
+  height: 450px;
+  overflow-y: auto;
+  border: solid black;
+  padding: 1em;
+}
+
+#finalGdocs .block {
+  width: 650px;
+  margin-left: auto;
+  margin-right: auto;
+  background: #eee;
+  border: 1px dashed gray;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 35px;
+  padding-right: 35px;
+}
+
+#finalGdocs .pesterlog {
+  font-size: 14px;
+  font-weight: bold;
+  font-family: courier, monospace;
+  color: #000000;
+  background: #eee;
+  white-space: pre-line;
+}
+
+#finalGdocs p {
+  background: white;
+}
+
+#finalGdocs p span:not(.plain) {
+  font-family: courier, monospace;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+#finalGdocs table + table {
+  margin-top: 1em;
 }
