@@ -674,6 +674,9 @@ const genCSSstyle = () => {
   const genGdocsStyle = document.getElementById("genGdocsStyle")
   genGdocsStyle.innerHTML = ""
 
+  const genMspfaStyle = document.getElementById("genMspfaStyle")
+  genMspfaStyle.innerHTML = ""
+
   // Discord
   const discordCols = {
     // normal: "#dcddde",
@@ -710,6 +713,10 @@ const genCSSstyle = () => {
 #workskin .${spanClass} { font-size: 14px; font-weight: bold; font-family: courier, monospace; color: ${format.color}; }
 #workskin .${spanClass}-plain { color: ${format.color}; }
     `
+    genMspfaStyle.innerHTML += `
+    #slide .${spanClass} { color: ${format.color} }
+    #slide .${spanClass}-plain { color: ${format.color}; }
+        `
     genGdocsStyle.innerHTML += `
 #gdocs .${spanClass}, #finalGdocs .${spanClass} { color: ${format.color} }
 #gdocs .${spanClass}-plain, #finalGdocs .${spanClass}-plain { color: ${format.color}; }
