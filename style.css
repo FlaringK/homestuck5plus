@@ -144,19 +144,16 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-#gdocs .block {
-  width: 650px;
+#gdocs .block, #finalGdocs .block {
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
   background: #eee;
   border: 1px dashed gray;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 35px;
-  padding-right: 35px;
+  padding: 2px 5px;
 }
 
-#gdocs .pesterlog {
+#gdocs .pesterlog, #finalGdocs .pesterlog {
   font-size: 14px;
   font-weight: bold;
   font-family: courier, monospace;
@@ -164,14 +161,33 @@ body {
   background: #eee;
 }
 
-#gdocs table + table {
+#gdocs table + table, #finalGdocs table + table {
   margin-top: 1em;
 }
 
-#gdocs p span:not(.plain) {
+#gdocs p span:not(.plain), #finalGdocs p span:not(.plain) {
   font-family: courier, monospace;
   font-size: 14px;
   font-weight: bold;
+}
+
+#finalGdocs .block {
+  width: 812px;
+}
+
+#finalGdocs {
+  height: 450px;
+  overflow-y: auto;
+  border: solid black;
+  padding: 1em;
+}
+
+#finalGdocs .pesterlog {
+  white-space: pre-line;
+}
+
+#finalGdocs p {
+  background: white;
 }
 
 /* Options Hud */
@@ -361,44 +377,3 @@ body {
   border-radius: 10px;
 }
 
-#finalGdocs {
-  height: 450px;
-  overflow-y: auto;
-  border: solid black;
-  padding: 1em;
-}
-
-#finalGdocs .block {
-  width: 650px;
-  margin-left: auto;
-  margin-right: auto;
-  background: #eee;
-  border: 1px dashed gray;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 35px;
-  padding-right: 35px;
-}
-
-#finalGdocs .pesterlog {
-  font-size: 14px;
-  font-weight: bold;
-  font-family: courier, monospace;
-  color: #000000;
-  background: #eee;
-  white-space: pre-line;
-}
-
-#finalGdocs p {
-  background: white;
-}
-
-#finalGdocs p span:not(.plain) {
-  font-family: courier, monospace;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-#finalGdocs table + table {
-  margin-top: 1em;
-}
