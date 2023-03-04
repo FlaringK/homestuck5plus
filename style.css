@@ -168,6 +168,12 @@ body {
   margin-top: 1em;
 }
 
+#gdocs p span:not(.plain) {
+  font-family: courier, monospace;
+  font-size: 14px;
+  font-weight: bold;
+}
+
 /* Options Hud */
 
 #title {
