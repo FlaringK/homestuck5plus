@@ -119,6 +119,26 @@ body {
 
 .discord { background-color: #36393f; }
 
+#discordChara {
+  font-family: "gg sans","Noto Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+  position: sticky;
+  bottom: 0.5em;
+  margin-right: auto;
+  width: max-content;
+  padding: .5em;
+  
+  background-color: #36393f;
+  color: #dcddde;
+
+  border: 1px solid #202225;
+  border-left: none;
+
+  border-radius: 0 3px 3px 0;
+  display: none;
+}
+
+.discord #discordChara { display: block }
+
 #tumblr {
   font-family: "Favorit", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
   background-color: white;

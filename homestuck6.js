@@ -239,7 +239,6 @@ const workStyleFunctions = [
   },
   // Discord
   output => {
-    
     const discord = document.getElementById("discord")
     discord.innerHTML = output.replace(regParaBlock, (match, p1) => {
       return `<p class="block"><span class="pesterlog">${
@@ -254,6 +253,12 @@ const workStyleFunctions = [
     }).replace(/```\n/g, "```").replace(regParagraph, (match, p1) => {
       return p1.replace(/<span.+?>|<\/span>/g, "`").replace(/<br>/, "")
     }).replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&").replace(/^\n/, "")
+
+    const charCount = 2000 - document.getElementById("finalDiscord").value.length
+
+    document.getElementById("discordChara").innerText = "Characters left: " + charCount
+    document.getElementById("discordChara").style.color = charCount < 0 ? "rgb(241, 104, 106)" : "#dcddde"
+    document.getElementById("discordChara").style.fontWeight = charCount < 0 ? "600" : "400"
   },
   // Tumblr
   output => {
@@ -751,7 +756,7 @@ const importJson = () => {
 }
 
 const showWork = () => {
-  document.querySelectorAll("#works > *, #copy > div").forEach(e => { e.style.display = "none"})
+  document.querySelectorAll("#works > .work, #copy > div").forEach(e => { e.style.display = "none"})
   document.getElementById(document.getElementById("showWork").value).style.display = "block"
   document.getElementById(document.getElementById("showWork").value + "-out").style.display = "block"
   document.getElementById("outputs").className = document.getElementById("showWork").value
