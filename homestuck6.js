@@ -252,7 +252,7 @@ const workStyleFunctions = [
       })}\`\`\`` 
     }).replace(/```\n/g, "```").replace(regParagraph, (match, p1) => {
       return p1.replace(/<span.+?>|<\/span>/g, "`").replace(/<br>/, "")
-    }).replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&").replace(/^\n/, "")
+    }).replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&").replace(/^\n/, "").trim()
 
     const charCount = 2000 - document.getElementById("finalDiscord").value.length
 
