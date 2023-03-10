@@ -377,27 +377,30 @@ const transcribe = () => {
         let foundHandle = false
         const lineHandle = line.match(regHandle)[0].replace(":", "")
 
+        const transformLineHandle = (spanClass, format) => {
+          if (lineHandle.includes("-")) line = line.replace(lineHandle, lineHandle.replace(/-/g, ""))
+          if (doHandleUpper) line = line.replace(lineHandle, lineHandle.toUpperCase())
+          if ("dualCol" in format) line = line.replace(lineHandle + ":", `${lineHandle}:</span><span class="${format.colorClasses[1]}">`)
+
+          line = `<span class="${"dualCol" in format ? format.colorClasses[0] : spanClass}">${line}</span>`
+          foundHandle = true
+
+          // Add spanclass to format
+          add2usedFormats(spanClass, format)
+        }
+
+        // Check for normal names
         for (const [spanClass, format] of Object.entries(userFormats)) {
           format.names.forEach(formatHandle => {
-            if (formatHandle.toLowerCase() == lineHandle.toLowerCase()) {
+            if (formatHandle.toLowerCase() == lineHandle.toLowerCase() && !foundHandle) transformLineHandle(spanClass, format)
+          })
+        }
 
-              // Remove "-" from handle
-              if (lineHandle.includes("-")) line = line.replace(lineHandle, lineHandle.replace(/-/g, ""))
-              // Capitalise Handles if doHandleUpper
-              if (doHandleUpper) line = line.replace(lineHandle, lineHandle.toUpperCase())
-
-              // If Dual colour surround handle with colour
-              if ("dualCol" in format) {
-                line = line.replace(lineHandle + ":", `${lineHandle}:</span><span class="${format.colorClasses[1]}">`)
-              }
-
-              line = `<span class="${"dualCol" in format ? format.colorClasses[0] : spanClass}">${line}</span>`
-              foundHandle = true
-
-              // Add spanclass to format
-              add2usedFormats(spanClass, format)
-
-            }
+        // If no found try again with current past and future
+        for (const [spanClass, format] of Object.entries(userFormats)) {
+          format.names.forEach(formatHandle => {
+            let handleRegex = new RegExp("(P|F|C)*" + formatHandle, "gi")
+            if (handleRegex.test(lineHandle) && !foundHandle) transformLineHandle(spanClass, format)
           })
         }
 
@@ -405,32 +408,40 @@ const transcribe = () => {
       }
 
       // == Replace all instances of chum handles ({EB} => ectoBiologist [EB]) == 
-      if (regChum.test(line)) {
-        const chumHandles = line.match(regChum)
+      const chumHandles = regChum.test(line) ? line.match(regChum) : []
 
-        chumHandles.forEach(chumHandle => {
-          const handle = doHandleUpper ? chumHandle.slice(1, -1).toUpperCase() : chumHandle.slice(1, -1)
+      chumHandles.forEach(chumHandle => {
+        const handle = doHandleUpper ? chumHandle.slice(1, -1).toUpperCase() : chumHandle.slice(1, -1)
+        let replaced = false
 
-          for (const [spanClass, format] of Object.entries(userFormats)) {
-            // If the format doesn't have a chumhandle, skip it
-            if (!("chum" in format)) continue
+        let transformChumHandle = (spanClass, format, timePrefix) => {
+          line = line.replace(chumHandle, `<span class="${spanClass}">${timePrefix + format.chum} [${handle.replace(/-/g, "")}]</span>`)
+          isParagraphBlock = !isParagraphBlock ? doAutoLog : isParagraphBlock
+        
+          // Add spanclass to format
+          add2usedFormats(spanClass, format)
+          replaced = true
+        }
 
-            format.names.forEach(formatHandle => {
-              if (formatHandle.toLowerCase() == handle.toLowerCase()) {
-  
-                line = line.replace(chumHandle, `<span class="${spanClass}">${format.chum} [${handle.replace(/-/g, "")}]</span>`)
-                isParagraphBlock = !isParagraphBlock ? doAutoLog : isParagraphBlock
-                
-                // Add spanclass to format
-                add2usedFormats(spanClass, format)
+        for (const [spanClass, format] of Object.entries(userFormats)) {
+          format.names.forEach(formatHandle => {
+            if (formatHandle.toLowerCase() == handle.toLowerCase() && !replaced) transformChumHandle(spanClass, format, "")
+          })
+        }
 
-              }
-            })
+        for (const [spanClass, format] of Object.entries(userFormats)) {
+          format.names.forEach(formatHandle => {
+            let handleRegex = new RegExp("(P|F|C)*" + formatHandle, "gi")
+            if (handle.match(handleRegex) && !replaced) if (handle.match(handleRegex)[0] == handle) {
+              let prefix = handle.slice(0, formatHandle.length * -1)
+              prefix = prefix.replace(/P/gi, "PAST ").replace(/F/gi, "FUTURE ").replace(/C/gi, "CURRENT ")
+              transformChumHandle(spanClass, format, prefix)
+            }
+          })
+        }
 
-          }
-        })
+      })
 
-      }
 
       // == Check for manual block syntax ==
       if (line == logSyntax)  {
