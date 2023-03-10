@@ -399,7 +399,7 @@ const transcribe = () => {
         // If no found try again with current past and future
         for (const [spanClass, format] of Object.entries(userFormats)) {
           format.names.forEach(formatHandle => {
-            let handleRegex = new RegExp("(P|F|C)*" + formatHandle, "gi")
+            let handleRegex = new RegExp("[FCPL]*" + formatHandle, "gi")
             if (handleRegex.test(lineHandle) && !foundHandle) transformLineHandle(spanClass, format)
           })
         }
@@ -431,10 +431,10 @@ const transcribe = () => {
 
         for (const [spanClass, format] of Object.entries(userFormats)) {
           format.names.forEach(formatHandle => {
-            let handleRegex = new RegExp("(P|F|C)*" + formatHandle, "gi")
+            let handleRegex = new RegExp("[FCPL]*" + formatHandle, "gi")
             if (handle.match(handleRegex) && !replaced) if (handle.match(handleRegex)[0] == handle) {
               let prefix = handle.slice(0, formatHandle.length * -1)
-              prefix = prefix.replace(/P/gi, "PAST ").replace(/F/gi, "FUTURE ").replace(/C/gi, "CURRENT ")
+              prefix = prefix.replace(/P/gi, "PAST ").replace(/F/gi, "FUTURE ").replace(/C/gi, "CURRENT ").replace(/L/gi, "LATER ")
               transformChumHandle(spanClass, format, prefix)
             }
           })
