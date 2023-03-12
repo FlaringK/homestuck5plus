@@ -236,6 +236,8 @@ const workStyleFunctions = [
     document.getElementById("finalMspfaHtml").value = mspfa.innerHTML.replace(/<span class="(.+?)">/g, (match, p1) => {
       return `[color=${userFormats[p1.replace("-plain", "")].color}]`
     }).replace(/<\/span>/g, "[/color]").replace(/<div class="spoiler"><div>((.|\n)*?)<\/div><\/div><br>/g, "[spoiler]$1[/spoiler]").replace(/<br>/g, "").replace(/^\s+/gm, "").trim()
+
+    document.getElementById("finalMspfaHtmlEsc").value = document.getElementById("finalMspfaHtml").value.replace(/\n/g, "\\n").replace(/"/g, "\\\"")
   },
   // Discord
   output => {
