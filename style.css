@@ -210,6 +210,12 @@ body {
   background: white;
 }
 
+#cohost {
+  font-family: Atkinson Hyperlegible,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,segoe ui,Roboto,helvetica neue,Arial,noto sans,sans-serif,apple color emoji,segoe ui emoji,segoe ui symbol,noto color emoji;
+  padding-left: .75rem;
+  padding-right: .75rem;
+}
+
 /* Options Hud */
 
 #title {

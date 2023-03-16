@@ -271,12 +271,21 @@ const workStyleFunctions = [
 
     document.getElementById("finalTumblr").value = tumblr.innerHTML
   },
-  // Tumblr
+  // Gdocs
   output => {
     const gdocs = document.getElementById("gdocs")
     gdocs.innerHTML = output.replace(/^\s+/gm, "").replace(/<p class="block"><span class="pesterlog">\n((.|\n)*?)\n<\/span><\/p>/g, `<table class="block"><tr><td><span class="pesterlog">$1</span></td></tr></table>`).replace(/-plain"/g, " plain\"")
 
     document.getElementById("finalGdocs").innerHTML = gdocs.innerHTML.replace(/<br>/g, "")
+  },
+  // Cohost 
+  output => {
+    const cohost = document.getElementById("cohost")
+    cohost.innerHTML = output.replace(regParaBlock, `<div style='background: #eeeeee; padding: 12px 5%; font-family: Courier New, Courier, monospace; font-weight: bold; line-height: 1.2em; border: 1px dashed gray; font-size: 14px;'>$1</div>`).replace(/<span class="(.+?)">/g, (match, p1) => {
+      return `<span style='color: ${userFormats[p1.replace("-plain", "")].color}; ${p1.includes("-plain") ? "" : "font-family: Courier New, Courier, monospace; font-weight: bold"};'>`
+    }).replace(/^\s+/gm, "").replace(/<\/div>\n<div/g, "</div>\n<br><div")
+
+    document.getElementById("finalCohost").innerHTML = cohost.innerHTML
   }
 ]
 
