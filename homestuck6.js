@@ -411,7 +411,9 @@ const transcribe = () => {
         for (const [spanClass, format] of Object.entries(userFormats)) {
           format.names.forEach(formatHandle => {
             let handleRegex = new RegExp("[FCPL]*" + formatHandle, "gi")
-            if (handleRegex.test(lineHandle) && !foundHandle) transformLineHandle(spanClass, format)
+            if (lineHandle.match(handleRegex) && !foundHandle) if (lineHandle.match(handleRegex)[0] == lineHandle) {
+              transformLineHandle(spanClass, format)
+            }
           })
         }
 
