@@ -428,7 +428,7 @@ const transcribe = () => {
         let replaced = false
 
         let transformChumHandle = (spanClass, format, timePrefix) => {
-          line = line.replace(chumHandle, `<span class="${spanClass}">${timePrefix + format.chum} [${handle.replace(/-/g, "")}]</span>`)
+          line = line.replace(chumHandle, `${timePrefix + format.chum} <span class="${spanClass}">[${handle.replace(/-/g, "")}]</span>`)
           isParagraphBlock = !isParagraphBlock ? doAutoLog : isParagraphBlock
         
           // Add spanclass to format
