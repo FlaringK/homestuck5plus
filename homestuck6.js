@@ -286,6 +286,15 @@ const workStyleFunctions = [
     }).replace(/^\s+/gm, "").replace(/<\/div>\n<div/g, "</div>\n<br><div")
 
     document.getElementById("finalCohost").innerHTML = cohost.innerHTML
+  },
+  // Epilogue
+  output => {
+    const epilogue = document.getElementById("epilogue")
+    epilogue.innerHTML = output.replace(regParaBlock, `<div class="chat" style="margin: 15px 0px 15px 25px; font-family: 'courier-std', courier, monospace; font-weight: bold; line-height: 1.35;">$1</div>`).replace(/<span class="(.+?)">/g, (match, p1) => {
+      return `<span style='color: ${userFormats[p1.replace("-plain", "")].color}; ${p1.includes("-plain") ? "" : "font-family: Courier New, Courier, monospace; font-weight: bold"};'>`
+    }).replace(regParagraph, `<p style="text-indent: 25px; margin: 0;">$1</p>`).replace(/<p style="text-indent: 25px; margin: 0;">([\n\s]*)(.)/, `<p class="no-indent" style="margin: 0;">$1<span class="opener" style="float: left; font-size: 51px; font-family: FontStuck Extended, Homestuck-Regular, monospace; line-height: 0.7; margin-right: 4px; font-weight: bold">$2</span>`).replace(/<p style="text-indent: 25px; margin: 0;">([\n\s])*>/g, `<p class="command" style="margin: 15px 0px 15px 25px; font-family: Verdana, sans-serif;">$1>`)
+
+    document.getElementById("finalEpilogue").innerHTML = epilogue.innerHTML
   }
 ]
 

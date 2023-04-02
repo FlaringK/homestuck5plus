@@ -216,6 +216,11 @@ body {
   padding-right: .75rem;
 }
 
+#epilogue {
+  padding: 15px 30px 15px;
+  font-family: adobe-garamond-pro, serif;
+}
+
 /* Options Hud */
 
 #title {
