@@ -280,7 +280,6 @@ const workStyleFunctions = [
   },
   // Cohost 
   output => {
-    // `<div style='background: #eeeeee; padding: 12px 5%; font-family: Courier New, Courier, monospace; font-weight: bold; line-height: 1.2em; border: 1px dashed gray; font-size: 14px;'>$1</div>`
     const cohost = document.getElementById("cohost")
     cohost.innerHTML = output.replace(regParaBlock, (match, p1) => {
       let colourSpans = p1.replace(/<span class="(.+?)">/g, (match, p1) => {
