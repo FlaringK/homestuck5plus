@@ -280,8 +280,14 @@ const workStyleFunctions = [
   },
   // Cohost 
   output => {
+    // `<div style='background: #eeeeee; padding: 12px 5%; font-family: Courier New, Courier, monospace; font-weight: bold; line-height: 1.2em; border: 1px dashed gray; font-size: 14px;'>$1</div>`
     const cohost = document.getElementById("cohost")
-    cohost.innerHTML = output.replace(regParaBlock, `<div style='background: #eeeeee; padding: 12px 5%; font-family: Courier New, Courier, monospace; font-weight: bold; line-height: 1.2em; border: 1px dashed gray; font-size: 14px;'>$1</div>`).replace(/<span class="(.+?)">/g, (match, p1) => {
+    cohost.innerHTML = output.replace(regParaBlock, (match, p1) => {
+      let colourSpans = p1.replace(/<span class="(.+?)">/g, (match, p1) => {
+        return `<span style='color: ${userFormats[p1.replace("-plain", "")].color};'>`
+      })
+      return `<div style='background: #eeeeee; padding: 12px 5%; font-family: Courier New, Courier, monospace; font-weight: bold; line-height: 1.2em; border: 1px dashed gray; font-size: 14px;'>${colourSpans}</div>`
+    }).replace(/<span class="(.+?)">/g, (match, p1) => {
       return `<span style='color: ${userFormats[p1.replace("-plain", "")].color}; ${p1.includes("-plain") ? "" : "font-family: Courier New, Courier, monospace; font-weight: bold"};'>`
     }).replace(/^\s+/gm, "").replace(/<\/div>\n<div/g, "</div>\n<br><div")
 
