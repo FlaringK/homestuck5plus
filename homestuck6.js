@@ -311,6 +311,7 @@ const transcribe = () => {
   // Options
   const doAutoLog = document.getElementById("autoLog").checked
   const doHandleUpper = document.getElementById("handleUpper").checked
+  const doFullColourChum = document.getElementById("fullColorChum").checked
 
   // Split into lines
   const lines = inputText.split("\n")
@@ -442,7 +443,11 @@ const transcribe = () => {
         let replaced = false
 
         let transformChumHandle = (spanClass, format, timePrefix) => {
-          line = line.replace(chumHandle, `${timePrefix + format.chum} <span class="${spanClass}">[${handle.replace(/-/g, "")}]</span>`)
+          if (doFullColourChum) {
+            line = line.replace(chumHandle, `<span class="${spanClass}">${timePrefix + format.chum} [${handle.replace(/-/g, "")}]</span>`)
+          } else {
+            line = line.replace(chumHandle, `${timePrefix + format.chum} <span class="${spanClass}">[${handle.replace(/-/g, "")}]</span>`)
+          }
           isParagraphBlock = !isParagraphBlock ? doAutoLog : isParagraphBlock
         
           // Add spanclass to format
