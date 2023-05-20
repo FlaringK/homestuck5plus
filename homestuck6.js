@@ -174,7 +174,7 @@ homestuckFormats.jasper = {
 }
 homestuckFormats.jasprose = {
   dualCol: true,
-  names: ["Jasprosesprite^2", "Jazz"],
+  names: ["Jasprosesprite^2", "Jasprose^2", "Jasprose", "Jazz"],
   colorClasses: ["jasper", "rose"]
 }
 
