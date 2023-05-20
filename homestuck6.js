@@ -105,7 +105,7 @@ const defultFormats = {
   },
   feferi: {
     color: "#77003c",
-    names: ["feferi", "CC", "Meenah"],
+    names: ["feferi", "CC", "Meenah", ")(IC"],
     chum: "cuttlefishCuller"
   },
 
@@ -157,12 +157,12 @@ const defultFormats = {
 
   jasprose: {
     dualCol: true,
-    names: ["Jasprosesprite^2", "Jazz"],
+    names: ["Jasprosesprite^2", "Jasprose^2", "Jasprose", "Jazz"],
     colorClasses: ["roxy", "rose"]
   },
   davepeta: {
     dualCol: true,
-    names: ["Davepetasprite^2", "Davepeta"],
+    names: ["Davepetasprite^2", "Davepeta^2", "Davepeta"],
     colorClasses: ["jade", "dirk"]
   }
 }
@@ -425,7 +425,7 @@ const transcribe = () => {
         // If no found try again with current past and future
         for (const [spanClass, format] of Object.entries(userFormats)) {
           format.names.forEach(formatHandle => {
-            let handleRegex = new RegExp("[FCPL]*" + formatHandle, "gi")
+            let handleRegex = genTimeHandle(formatHandle)
             if (lineHandle.match(handleRegex) && !foundHandle) if (lineHandle.match(handleRegex)[0] == lineHandle) {
               transformLineHandle(spanClass, format)
             }
@@ -463,7 +463,7 @@ const transcribe = () => {
 
         for (const [spanClass, format] of Object.entries(userFormats)) {
           format.names.forEach(formatHandle => {
-            let handleRegex = new RegExp("[FCPL]*" + formatHandle, "gi")
+            let handleRegex = genTimeHandle(formatHandle)
             if (handle.match(handleRegex) && !replaced) if (handle.match(handleRegex)[0] == handle) {
               let prefix = handle.slice(0, formatHandle.length * -1)
               prefix = prefix.replace(/P/gi, "PAST ").replace(/F/gi, "FUTURE ").replace(/C/gi, "CURRENT ").replace(/L/gi, "LATER ")
@@ -476,7 +476,7 @@ const transcribe = () => {
 
 
       // == Check for manual block syntax ==
-      if (line == logSyntax)  {
+      if (line.toUpperCase() == logSyntax)  {
         isParagraphBlock = true
         doLineBreak = false
         line = ""
@@ -609,6 +609,8 @@ const genFormatEditor = () => {
   }
   genCSSstyle()
 }
+
+const genTimeHandle = handle => new RegExp("[FCPL]*" + handle.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&'), "gi")
 
 const toggleCollapse = spanClass => {
   let targetDiv = document.querySelector(`div[data-format="${spanClass}"] .collapse`)
