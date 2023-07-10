@@ -404,7 +404,7 @@ const transcribe = () => {
         const lineHandle = line.match(regHandle)[0].replace(":", "")
 
         const transformLineHandle = (spanClass, format) => {
-          if (lineHandle.includes("-")) line = line.replace(lineHandle, lineHandle.replace(/-/g, ""))
+          if (lineHandle.includes("-")) line = line.replace(lineHandle, lineHandle.replace(/-$/g, ""))
           if (doHandleUpper) line = line.replace(lineHandle, lineHandle.toUpperCase())
           if ("dualCol" in format) line = line.replace(lineHandle + ":", `${lineHandle}:</span><span class="${format.colorClasses[1]}">`)
 
