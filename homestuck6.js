@@ -191,8 +191,8 @@ const regHandle = /^[^\s]*?:/
 const regChum = /{[^\s]*?}/g
 const regCharSpans = /\$[^\s]*/g
 
-const regParagraph = /<p>((.|\n)*?)<\/p>/g
-const regParaBlock = /<p class="block"><span class="pesterlog">((.|\n)*?)<\/span><\/p>/g
+// const regParagraph = /<p>((.|\n)*?)<\/p>/g
+// const regParaBlock = /<p class="block"><span class="pesterlog">((.|\n)*?)<\/span><\/p>/g
 
 const logSyntax = "%LOG%"
 
@@ -226,82 +226,230 @@ const discordReplaces = {
   grey: "[0;30m",
 }
 
-// Convert Work styles
-const workStyleFunctions = [
-  // Mspfa
-  output => {
-    const mspfa = document.getElementById("slide")
-    mspfa.innerHTML = output.replace(regParaBlock, `<div class="spoiler"><div>$1</div></div><br>`).replace(regParagraph, `$1 <br>`)
+// Styles
 
-    document.getElementById("finalMspfaHtml").value = mspfa.innerHTML.replace(/<span class="(.+?)">/g, (match, p1) => {
-      return `[color=${userFormats[p1.replace("-plain", "")].color}]`
-    }).replace(/<\/span>/g, "[/color]").replace(/<div class="spoiler"><div>((.|\n)*?)<\/div><\/div><br>/g, "[spoiler]$1[/spoiler]").replace(/<br>/g, "").replace(/^\s+/gm, "").trim()
+const outputStyles = [
+  {
+    name: "ao3",
+    title: "Archive Of Our Own",
+    htmlid: "workskin",
 
-    document.getElementById("finalMspfaHtmlEsc").value = document.getElementById("finalMspfaHtml").value.replace(/\n/g, "\\n").replace(/"/g, "\\\"")
+    display: {
+      para: [`<p>`, `</p>`],
+      log: [`<p class="block"><span class="pesterlog">`, `</span></p>`],
+      color: [`<span class="%CLASS%">`, `</span>`],
+      colorPlain: [`<span class="%CLASS%-plain">`, `</span>`],
+      lineStart: ` `,
+      
+    },
+    copy: {
+      para: [`<p>`, `</p>`],
+      log: [`<p class="block"><span class="pesterlog">`, `</span></p>`],
+      color: [`<span class="%CLASS%">`, `</span>`],
+      colorPlain: [`<span class="%CLASS%-plain">`, `</span>`],
+      lineStart: ` `,
+      
+    }
   },
-  // Discord
-  output => {
-    const discord = document.getElementById("discord")
-    discord.innerHTML = output.replace(regParaBlock, (match, p1) => {
-      return `<p class="block"><span class="pesterlog">${
-        p1.replace(/<span class="(.+?)"/g, (match, p1) => `<span class="${discordFormats[p1] ? discordFormats[p1] : "normal"}"`)
-      }</span></p>`
-    })
+  {
+    name: "mspfa",
+    title: "MS Paint Fan Adventures",
+    htmlid: "slide",
 
-    document.getElementById("finalDiscord").value = discord.innerHTML.replace(/^\s+/gm, "").replace(regParaBlock, (match, p1) => {
-      return `\`\`\`ansi${p1.replace(/<\/span>/g, "[0;29m").replace(/<br>/g, "").replace(/<span class="(.+?)">/g, (match, p1) => {
-        return discordReplaces[p1] ? discordReplaces[p1] : ""
-      })}\`\`\`` 
-    }).replace(/```\n/g, "```").replace(regParagraph, (match, p1) => {
-      return p1.replace(/<span.+?>|<\/span>/g, "`").replace(/<br>/, "")
-    }).replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&").trim()
-
-    const charCount = 2000 - document.getElementById("finalDiscord").value.length
-
-    document.getElementById("discordChara").innerText = "Characters left: " + charCount
-    document.getElementById("discordChara").style.color = charCount < 0 ? "rgb(241, 104, 106)" : "#dcddde"
-    document.getElementById("discordChara").style.fontWeight = charCount < 0 ? "600" : "400"
+    display: {
+      para: [``, `<br>`],
+      log: [`<div class="spoiler"><div>`, `</div></div><br>`],
+      color: [`<span class="%CLASS%">`, `</span>`],
+      
+    },
+    copy: {
+      para: [``, ``],
+      log: [`[spoiler]`, `[/spoiler]`],
+      color: [`[color=#%COLOR%]`, `[/color]`],
+      lineEnd: " ",
+      blockSep: ""
+    }
   },
-  // Tumblr
-  output => {
-    const tumblr = document.getElementById("tumblr")
-    tumblr.innerHTML = output.replace(regParaBlock, `<p class="npf_chat"><b>$1</b></p>`).replace(/<span class="(.+?)">/g, (match, p1) => {
-      return `<span style="color: ${userFormats[p1.replace("-plain", "")].color}">`
-    }).replace(/^\s+/gm, "")
+  {
+    name: "discord",
+    title: "Discord ANSI",
 
-    document.getElementById("finalTumblr").value = tumblr.innerHTML
+    display: {
+      para: [`<p>`, `</p>`],
+      log: [`<p class="block"><span class="pesterlog">`, `</span></p>`],
+      color: [`<span class="%CLASSTRANSFORM%">`, `</span>`],
+      classTransform: className => discordFormats[className] ? discordFormats[className] : "normal"
+    },
+    copy: {
+      para: [``, ``],
+      log: ["\n```ansi", "```"],
+      color: ["`", "`"],
+      colorLog: [`%CLASSTRANSFORM%`, `"[0;29m`],
+      lineEnd: "",
+      classTransform: className => discordReplaces[discordFormats[className] ? discordFormats[className] : "normal"],
+      blockSep: "",
+      charLimit: {
+        limit: 2000,
+        sep: "\n ----------------------------------- \n NEW MESSAGE \n ----------------------------------- \n"
+      }
+    }
   },
-  // Gdocs
-  output => {
-    const gdocs = document.getElementById("gdocs")
-    gdocs.innerHTML = output.replace(/^\s+/gm, "").replace(/<p class="block"><span class="pesterlog">\n((.|\n)*?)\n<\/span><\/p>/g, `<table class="block"><tr><td><span class="pesterlog">$1</span></td></tr></table>`).replace(/-plain"/g, " plain\"")
+  {
+    name: "tumblr",
+    title: "Tumblr",
 
-    document.getElementById("finalGdocs").innerHTML = gdocs.innerHTML.replace(/<br>/g, "")
+    display: {
+      para: [`<p>`, `</p>`],
+      log: [`<p class="npf_chat"><b>`, `</b></p>`],
+      color: [`<span style="color: #%COLOR%">`, `</span>`],
+      
+    },
+    copy: {
+      para: [`<p>`, `</p>`],
+      log: [`<p class="npf_chat"><b>`, `</b></p>`],
+      color: [`<span style="color: #%COLOR%">`, `</span>`],
+      
+    }
   },
-  // Cohost 
-  output => {
-    const cohost = document.getElementById("cohost")
-    cohost.innerHTML = output.replace(regParaBlock, (match, p1) => {
-      let colourSpans = p1.replace(/<span class="(.+?)">/g, (match, p1) => {
-        return `<span style='color: ${userFormats[p1.replace("-plain", "")].color};'>`
-      })
-      return `<div style='background: #eeeeee; padding: 12px 5%; font-family: Courier New, Courier, monospace; font-weight: bold; line-height: 1.2em; border: 1px dashed gray; font-size: 14px;text-align: left;'>${colourSpans}</div>`
-    }).replace(/<span class="(.+?)">/g, (match, p1) => {
-      return `<span style='color: ${userFormats[p1.replace("-plain", "")].color}; ${p1.includes("-plain") ? "" : "font-family: Courier New, Courier, monospace; font-weight: bold"};'>`
-    }).replace(/^\s+/gm, "").replace(/<\/div>\n<div/g, "</div>\n<br><div")
+  {
+    name: "cohost",
+    title: "Cohost / Plain HTML",
 
-    document.getElementById("finalCohost").innerHTML = cohost.innerHTML
+    display: {
+      para: [`<p>`, `</p>`],
+      log: [`<div style='background: #eeeeee; padding: 12px 5%; font-family: Courier New, Courier, monospace; font-weight: bold; line-height: 1.2em; border: 1px dashed gray; font-size: 14px;text-align: left;'>`, `</div>`],
+      color: [`<span style="font-family: Courier New, Courier, monospace; font-weight: bold; color: #%COLOR%">`, `</span>`],
+      colorPlain: [`<span style="color: #%COLOR%">`, `</span>`],
+      
+    },
+    copy: {
+      para: [`<p>`, `</p>`],
+      log: [`<div style='background: #eeeeee; padding: 12px 5%; font-family: Courier New, Courier, monospace; font-weight: bold; line-height: 1.2em; border: 1px dashed gray; font-size: 14px;text-align: left;'>`, `</div>`],
+      color: [`<span style="font-family: Courier New, Courier, monospace; font-weight: bold; color: #%COLOR%">`, `</span>`],
+      colorPlain: [`<span style="color: #%COLOR%">`, `</span>`],
+      
+    }
   },
-  // Epilogue
-  output => {
-    const epilogue = document.getElementById("epilogue")
-    epilogue.innerHTML = output.replace(regParaBlock, `<div class="chat" style="margin: 15px 0px 15px 25px; font-family: 'courier-std', courier, monospace; font-weight: bold; line-height: 1.35;">$1</div>`).replace(/<span class="(.+?)">/g, (match, p1) => {
-      return `<span style='color: ${userFormats[p1.replace("-plain", "")].color}; ${p1.includes("-plain") ? "" : "font-family: Courier New, Courier, monospace; font-weight: bold"};'>`
-    }).replace(regParagraph, `<p style="text-indent: 25px; margin: 0;">$1</p>`).replace(/<p style="text-indent: 25px; margin: 0;">([\n\s]*)([^<])/, `<p class="no-indent" style="margin: 0;">$1<span class="opener" style="float: left; font-size: 51px; font-family: FontStuck Extended, Homestuck-Regular, monospace; line-height: 0.7; margin-right: 4px; font-weight: bold">$2</span>`).replace(/<p style="text-indent: 25px; margin: 0;">([\n\s])*>/g, `<p class="command" style="margin: 15px 0px 15px 25px; font-family: Verdana, sans-serif;">$1>`)
+  {
+    name: "basic",
+    title: "Basic HTML",
 
-    document.getElementById("finalEpilogue").innerHTML = epilogue.innerHTML
-  }
+    display: {
+      para: [`<p>`, `</p>`],
+      log: [`<p class="spoiler">`, `</p>`],
+      color: [`<span class="%CLASS%" style="color: #%COLOR%">`, `</span>`],
+      lineStart: ` `,
+    },
+    copy: {
+      para: [`<p>`, `</p>`],
+      log: [`<p class="spoiler">`, `</p>`],
+      color: [`<span class="%CLASS%" style="color: #%COLOR%">`, `</span>`],
+      lineStart: ` `,
+    },
+  },
+  {
+    name: "gdocs",
+    title: "Google Docs",
+
+    display: {
+      para: [`<p>`, `</p>`],
+      log: [`<table class="block"><tr><td><span class="pesterlog">`, `</span></td></tr></table>`],
+      color: [`<span style="color: #%COLOR%">`, `</span>`],
+    },
+    copy: {
+      para: [`<p>`, `</p>`],
+      log: [`<table class="block"><tr><td><span class="pesterlog">`, `</span></td></tr></table>`],
+      color: [`<span style="color: #%COLOR%">`, `</span>`],
+    }
+  },
 ]
+
+// Prepare Styles
+
+const styleSelect = document.getElementById("workStyles")
+outputStyles.forEach((style, i) => {
+  const styleOption = document.createElement("option")
+  styleOption.value = i
+  styleOption.innerText = style.title
+  styleSelect.appendChild(styleOption)
+})
+
+// Convert Work styles
+// const workStyleFunctions = [
+//   // Mspfa
+//   output => {
+//     const mspfa = document.getElementById("slide")
+//     mspfa.innerHTML = output.replace(regParaBlock, `<div class="spoiler"><div>$1</div></div><br>`).replace(regParagraph, `$1 <br>`)
+
+//     document.getElementById("finalMspfaHtml").value = mspfa.innerHTML.replace(/<span class="(.+?)">/g, (match, p1) => {
+//       return `[color=${userFormats[p1.replace("-plain", "")].color}]`
+//     }).replace(/<\/span>/g, "[/color]").replace(/<div class="spoiler"><div>((.|\n)*?)<\/div><\/div><br>/g, "[spoiler]$1[/spoiler]").replace(/<br>/g, "").replace(/^\s+/gm, "").trim()
+
+//     document.getElementById("finalMspfaHtmlEsc").value = document.getElementById("finalMspfaHtml").value.replace(/\n/g, "\\n").replace(/"/g, "\\\"")
+//   },
+//   // Discord
+//   output => {
+//     const discord = document.getElementById("discord")
+//     discord.innerHTML = output.replace(regParaBlock, (match, p1) => {
+//       return `<p class="block"><span class="pesterlog">${
+//         p1.replace(/<span class="(.+?)"/g, (match, p1) => `<span class="${discordFormats[p1] ? discordFormats[p1] : "normal"}"`)
+//       }</span></p>`
+//     })
+
+//     document.getElementById("finalDiscord").value = discord.innerHTML.replace(/^\s+/gm, "").replace(regParaBlock, (match, p1) => {
+//       return `\`\`\`ansi${p1.replace(/<\/span>/g, "[0;29m").replace(/<br>/g, "").replace(/<span class="(.+?)">/g, (match, p1) => {
+//         return discordReplaces[p1] ? discordReplaces[p1] : ""
+//       })}\`\`\`` 
+//     }).replace(/```\n/g, "```").replace(regParagraph, (match, p1) => {
+//       return p1.replace(/<span.+?>|<\/span>/g, "`").replace(/<br>/, "")
+//     }).replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&").trim()
+
+//     const charCount = 2000 - document.getElementById("finalDiscord").value.length
+
+//     document.getElementById("discordChara").innerText = "Characters left: " + charCount
+//     document.getElementById("discordChara").style.color = charCount < 0 ? "rgb(241, 104, 106)" : "#dcddde"
+//     document.getElementById("discordChara").style.fontWeight = charCount < 0 ? "600" : "400"
+//   },
+//   // Tumblr
+//   output => {
+//     const tumblr = document.getElementById("tumblr")
+//     tumblr.innerHTML = output.replace(regParaBlock, `<p class="npf_chat"><b>$1</b></p>`).replace(/<span class="(.+?)">/g, (match, p1) => {
+//       return `<span style="color: ${userFormats[p1.replace("-plain", "")].color}">`
+//     }).replace(/^\s+/gm, "")
+
+//     document.getElementById("finalTumblr").value = tumblr.innerHTML
+//   },
+//   // Gdocs
+//   output => {
+//     const gdocs = document.getElementById("gdocs")
+//     gdocs.innerHTML = output.replace(/^\s+/gm, "").replace(/<p class="block"><span class="pesterlog">\n((.|\n)*?)\n<\/span><\/p>/g, `<table class="block"><tr><td><span class="pesterlog">$1</span></td></tr></table>`).replace(/-plain"/g, " plain\"")
+
+//     document.getElementById("finalGdocs").innerHTML = gdocs.innerHTML.replace(/<br>/g, "")
+//   },
+//   // Cohost 
+//   output => {
+//     const cohost = document.getElementById("cohost")
+//     cohost.innerHTML = output.replace(regParaBlock, (match, p1) => {
+//       let colourSpans = p1.replace(/<span class="(.+?)">/g, (match, p1) => {
+//         return `<span style='color: ${userFormats[p1.replace("-plain", "")].color};'>`
+//       })
+//       return `<div style='background: #eeeeee; padding: 12px 5%; font-family: Courier New, Courier, monospace; font-weight: bold; line-height: 1.2em; border: 1px dashed gray; font-size: 14px;text-align: left;'>${colourSpans}</div>`
+//     }).replace(/<span class="(.+?)">/g, (match, p1) => {
+//       return `<span style='color: ${userFormats[p1.replace("-plain", "")].color}; ${p1.includes("-plain") ? "" : "font-family: Courier New, Courier, monospace; font-weight: bold"};'>`
+//     }).replace(/^\s+/gm, "").replace(/<\/div>\n<div/g, "</div>\n<br><div")
+
+//     document.getElementById("finalCohost").innerHTML = cohost.innerHTML
+//   },
+//   // Epilogue
+//   output => {
+//     const epilogue = document.getElementById("epilogue")
+//     epilogue.innerHTML = output.replace(regParaBlock, `<div class="chat" style="margin: 15px 0px 15px 25px; font-family: 'courier-std', courier, monospace; font-weight: bold; line-height: 1.35;">$1</div>`).replace(/<span class="(.+?)">/g, (match, p1) => {
+//       return `<span style='color: ${userFormats[p1.replace("-plain", "")].color}; ${p1.includes("-plain") ? "" : "font-family: Courier New, Courier, monospace; font-weight: bold"};'>`
+//     }).replace(regParagraph, `<p style="text-indent: 25px; margin: 0;">$1</p>`).replace(/<p style="text-indent: 25px; margin: 0;">([\n\s]*)([^<])/, `<p class="no-indent" style="margin: 0;">$1<span class="opener" style="float: left; font-size: 51px; font-family: FontStuck Extended, Homestuck-Regular, monospace; line-height: 0.7; margin-right: 4px; font-weight: bold">$2</span>`).replace(/<p style="text-indent: 25px; margin: 0;">([\n\s])*>/g, `<p class="command" style="margin: 15px 0px 15px 25px; font-family: Verdana, sans-serif;">$1>`)
+
+//     document.getElementById("finalEpilogue").innerHTML = epilogue.innerHTML
+//   }
+// ]
 
 // Transcribe Input
 const transcribe = () => {
@@ -366,24 +514,24 @@ const transcribe = () => {
           for (const [spanClass, format] of Object.entries(userFormats)) {
             format.names.forEach(formatHandle => {
               if (formatHandle.toLowerCase() == chara.toLowerCase()) {
-                line = line.replace(key + " ", `<span class="${spanClass}">`)
+                line = line.replace(key + " ", spanStart(spanClass))
 
                 if (line.includes("$-")) {
-                  line = line.replace("$-", "</span>")
+                  line = line.replace("$-", "[/SPAN]")
                 } else {
-                  line = line + "</span>"
+                  line = line + "[/SPAN]"
                 }
 
                 // Add spanclass to format
                 if (!usedFormats.includes(spanClass)) usedFormats.push(spanClass)
               }
               if ("$" + formatHandle.toLowerCase() == chara.toLowerCase()) {
-                line = line.replace(key + " ", `<span class="${spanClass}-plain">`)
+                line = line.replace(key + " ", spanStart(spanClass, "PLAIN"))
 
                 if (line.includes("$-")) {
-                  line = line.replace("$-", "</span>")
+                  line = line.replace("$-", "[/SPAN]")
                 } else {
-                  line = line + "</span>"
+                  line = line + "[/SPAN]"
                 }
 
                 // Add spanclass to format
@@ -406,9 +554,9 @@ const transcribe = () => {
         const transformLineHandle = (spanClass, format) => {
           if (lineHandle.includes("-")) line = line.replace(lineHandle, lineHandle.replace(/-+$/g, ""))
           if (doHandleUpper) line = line.replace(lineHandle, lineHandle.toUpperCase())
-          if ("dualCol" in format) line = line.replace(lineHandle + ":", `${lineHandle}:</span><span class="${format.colorClasses[1]}">`)
+          if ("dualCol" in format) line = line.replace(lineHandle + ":", `${lineHandle}:[/SPAN]${spanStart(format.colorClasses[1])}`)
 
-          line = `<span class="${"dualCol" in format ? format.colorClasses[0] : spanClass}">${line}</span>`
+          line = `${spanStart("dualCol" in format ? format.colorClasses[0] : spanClass)}${line}[/SPAN]`
           foundHandle = true
 
           // Add spanclass to format
@@ -432,7 +580,7 @@ const transcribe = () => {
           })
         }
 
-        if (!foundHandle) line = `<span class="black">${line}</span>`
+        if (!foundHandle) line = spanStart("black") + line + "[/SPAN]"
       }
 
       // == Replace all instances of chum handles ({EB} => ectoBiologist [EB]) == 
@@ -444,9 +592,9 @@ const transcribe = () => {
 
         let transformChumHandle = (spanClass, format, timePrefix) => {
           if (doFullColourChum) {
-            line = line.replace(chumHandle, `<span class="${spanClass}">${timePrefix + format.chum} [${handle.replace(/-/g, "")}]</span>`)
+            line = line.replace(chumHandle, `${spanStart(spanClass)}${timePrefix + format.chum} [${handle.replace(/-/g, "")}][/SPAN]`)
           } else {
-            line = line.replace(chumHandle, `${timePrefix + format.chum} <span class="${spanClass}">[${handle.replace(/-/g, "")}]</span>`)
+            line = line.replace(chumHandle, `${timePrefix + format.chum} ${spanStart(spanClass)}[${handle.replace(/-/g, "")}][/SPAN]`)
           }
           isParagraphBlock = !isParagraphBlock ? doAutoLog : isParagraphBlock
         
@@ -482,31 +630,31 @@ const transcribe = () => {
         line = ""
       }
 
-      paragraphText += "  " + line + (doLineBreak ? " <br/>\n" : "")
+      paragraphText += "[LINESTART]" + line + (doLineBreak ? " [LINEEND]\n" : "")
 
     })
 
     if (isParagraphBlock) {
-      output += `<p class="block"><span class="pesterlog">\n${paragraphText}</span></p>\n\n`
+      output += `[LOG]\n${paragraphText}[/LOG]\n\n`
     } else {
-      output += `<p>\n${paragraphText}</p>\n\n`
+      output += `[PARA]\n${paragraphText}[/PARA]\n\n`
     }
 
   })
-  
-  outputDiv.innerHTML = output
-
-  document.getElementById("finalAo3Html").value = outputDiv.innerHTML
-  document.getElementById("finalAo3CSS").value = document.getElementById("genAo3Style").innerHTML
 
   setSkinStatus(usedFormats)
   convertWork(output)
 
 }
 
+
+const genTimeHandle = handle => new RegExp("[FCPL]*" + handle.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&'), "gi")
+
+const spanStart = (className, type) => `[SPAN${type ?? ""} "${className}" ${userFormats[className].color}]`
+
 const setSkinStatus = usedFormats => {
   const skinStatus = document.getElementById("skinStatus")
-  const ao3CssCopy = document.getElementById("ao3CssCopy")
+  const ao3CssCopy = document.getElementById("finalAo3CSS")
 
   let isCompatible = true
   usedFormats.forEach(e => {
@@ -516,20 +664,90 @@ const setSkinStatus = usedFormats => {
   if (isCompatible) {
     skinStatus.innerHTML = "This work is compatible with AO3's homestuck workskin."
     skinStatus.className = "green"
-    ao3CssCopy.style.display = "none"
-    
   } else {
     skinStatus.innerHTML = "This work is not compatible with AO3's homestuck workskin. You will have to create a custom workskin using the generated CSS."
     skinStatus.className = "red"
-    ao3CssCopy.style.display = "block"
+    ao3CssCopy.value = document.getElementById("genAo3Style").innerText
   }
 }
 
 const convertWork = output => {
+  const selectedStyle = outputStyles[styleSelect.value]
+  const workDiv = document.querySelector("#work > div")
+  const outputArea = document.querySelector("#mainOutput")
 
-  workStyleFunctions.forEach(func => { func(output) })
+  document.getElementById("styleTitle").innerText = selectedStyle.title
 
+  console.log(selectedStyle)
+  workDiv.innerHTML = ""
+  workDiv.className = selectedStyle.name
+  workDiv.id = selectedStyle.htmlid ?? selectedStyle.name
+
+  workDiv.innerHTML = replaceTextWithStyle(output, selectedStyle.display)
+  outputArea.value = replaceTextWithStyle(output, selectedStyle.copy)
+
+  // Show hints
+  document.querySelectorAll("#hints > div").forEach(hint => {
+    hint.style.display = hint.dataset.styleHint == selectedStyle.name ? "block" : "none"
+  })
+
+  // Gdoc hard code fuck you
+  if (selectedStyle.name == "gdocs") {
+    document.getElementById("finalGdocs").innerHTML = outputArea.value.replace(/<br>/g, "")
+  }
 }
+
+const replaceTextWithStyle = (text, style) => {
+
+  let blocks = text.split("\n\n")
+  let charCount = 0
+
+  blocks.forEach((block, i) => {
+    const isLog = block.startsWith("[LOG]")
+
+    // Basic replaces
+    block = block.replace(/\[PARA\]/g, style.para[0])
+    block = block.replace(/\[\/PARA\]/g, style.para[1])
+    block = block.replace(/\[LOG\]/g, style.log[0])
+    block = block.replace(/\[\/LOG\]/g, style.log[1])
+    block = block.replace(/\[LINESTART\]/g, style.lineStart ?? "")
+    block = block.replace(/\[LINEEND\]/g, style.lineEnd ?? "<br>")
+
+    // Spans
+    const spanRegex = /\[SPAN(.*?) "(.+?)" #(.+?)\](.*?)\[\/SPAN\]/g
+    const spanFunction = (match, type, className, color, text) => {
+
+      const spanType = type == "PLAIN" && style.colorPlain ? style.colorPlain : isLog ? style.colorLog ?? style.color : style.color
+      let [spanStart, spanEnd] = spanType
+
+      spanStart = spanStart.replace("%CLASS%", className)
+      spanStart = spanStart.replace("%COLOR%", color)
+
+      if (style.colorTransform) spanStart = spanStart.replace("%COLTRANSFORM%", style.colorTransform(color))
+      if (style.classTransform) spanStart = spanStart.replace("%CLASSTRANSFORM%", style.classTransform(className))
+
+      return spanStart + text + spanEnd
+    }
+
+    for (let i = 0; i < 4; i++) {
+      block = block.replace(spanRegex, spanFunction) 
+    }
+
+    charCount += block.length
+
+    if (style.charLimit) {
+      if (charCount > style.charLimit.limit) {
+        block = style.charLimit.sep + block
+        charCount = block.length
+      }
+    }
+
+    blocks[i] = block
+  })
+
+  return blocks.join(style.blockSep ?? "\n\n").trim()
+}
+
 
 // == Pop ups == //
 
@@ -609,8 +827,6 @@ const genFormatEditor = () => {
   }
   genCSSstyle()
 }
-
-const genTimeHandle = handle => new RegExp("[FCPL]*" + handle.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&'), "gi")
 
 const toggleCollapse = spanClass => {
   let targetDiv = document.querySelector(`div[data-format="${spanClass}"] .collapse`)
@@ -800,13 +1016,6 @@ const importJson = () => {
   } catch (e) { }
 }
 
-const showWork = () => {
-  document.querySelectorAll("#works > .work, #copy > div").forEach(e => { e.style.display = "none"})
-  document.getElementById(document.getElementById("showWork").value).style.display = "block"
-  document.getElementById(document.getElementById("showWork").value + "-out").style.display = "block"
-  document.getElementById("outputs").className = document.getElementById("showWork").value
-}
-
 const genNewDualFormat = () => {
   let optionsClasses = ""
   for (const [spanClass, format] of Object.entries(userFormats)) {
@@ -842,5 +1051,4 @@ const addNewDualFormat = () => {
 
 genFormatEditor()
 genNewUserFormat()
-showWork()
 transcribe()

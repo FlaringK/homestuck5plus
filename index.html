@@ -83,23 +83,12 @@ TT: Well, I'm glad someone's having a good time.
 That's what I'VE been saying!!!
     </textarea>
     <div id="outputs">
-      <div id="outputHeader">Display style: <select name="showWork" id="showWork" onchange="showWork()">
-        <option value="workskin">Archive Of Our Own</option>
-        <option value="slide">MS Paint Fan Adventures</option>
-        <option value="discord">Discord</option>
-        <option value="tumblr">Tumblr</option>
-        <option value="gdocs">Google Docs</option>
-        <option value="cohost">Cohost / Plain HTML</option>
-        <option value="epilogue">Epilogue HTML</option>
-      </select></div>
-      <div id="works">
+      <div id="outputHeader">
+        Display style: 
+        <select name="workStyles" id="workStyles" onchange="transcribe()"></select>
+      </div>
+      <div id="work">
         <div id="workskin" class="workskin work"></div>
-        <div id="slide" class="mspfa work" style="display: none;"></div>
-        <div id="discord" class="discord work" style="display: none;"></div>
-        <div id="tumblr" class="tumblr work" style="display: none;"></div>
-        <div id="gdocs" class="gdocs work" style="display: none;"></div>
-        <div id="cohost" class="cohost work" style="display: none;"></div>
-        <div id="epilogue" class="epilogue work" style="display: none;"></div>
       </div>
       <div id="discordChara">2000</div>
     </div>
@@ -242,76 +231,48 @@ That's what I'VE been saying!!!
     </div>
 
     <div id="copy">
-      <h1>Copy Html</h1>
-      <div id="workskin-out">
-        <h2>Selected style: Archive of our own</h2>
-        <p>
-          <div id="skinStatus">Work is compatible</div>
-        </p>
-        <p style="text-align: center;">
-          <b>HTML</b> <br>
-          <textarea name="finalAo3Html" id="finalAo3Html" cols="70" rows="10" style="margin: auto; display: block;"></textarea>
-        </p>
-        <p style="text-align: center;" id="ao3CssCopy">
-          <b>CSS</b> <br>
-          <textarea name="finalAo3CSS" id="finalAo3CSS" cols="70" rows="10" style="margin: auto; display: block;"></textarea>
-        </p>
-      </div>
-      <div id="slide-out">
-        <h2>Selected style: MS Paint Fan Adventures</h2>
-        <p style="text-align: center;">
-          <b>HTML</b> <br>
-          <textarea name="finalMspfaHtml" id="finalMspfaHtml" cols="70" rows="10" style="margin: auto; display: block;"></textarea>
-        </p>
-        <p style="text-align: center;">
-          <b>HTML (JSON compatible)</b> <br>
-          <textarea name="finalMspfaHtmlEsc" id="finalMspfaHtmlEsc" cols="70" rows="10" style="margin: auto; display: block;"></textarea>
-        </p>
-      </div>
-      <div id="discord-out">
-        <h2>Selected style: Discord</h2>
-        <p style="text-align: center;">
-          <b>Text</b> <br>
-          <textarea name="finalDiscord" id="finalDiscord" cols="70" rows="10" style="margin: auto; display: block;"></textarea>
-        </p>
-      </div>
-      <div id="tumblr-out">
-        <h2>Selected style: Tumblr</h2>
-        <p style="text-align: center;">
-          <b>HTML</b> <br>
-          <textarea name="finalTumblr" id="finalTumblr" cols="70" rows="10" style="margin: auto; display: block;"></textarea>
-        </p>
-        <p>
-          <b>How to format your tumblr post</b> <br>
-          Posting works on tumblr is a tad tricky due to the tumblr editor being... sub-optimal. On the tumblr post editor, click the gear icon in the corner and change your text editor to HTML. Then paste in your work.
-          <img src="./tumblr-tutorial.png" class="tumblr-tutorial">
-          After you paste your work in, enter the Preview tab. For each pesterlog in your work, highlight any part of it's text and change it's paragraph type to Chat.
-          <img src="./tumblr-tutorial-2.png" class="tumblr-tutorial">
-          If you go back and edit the pesterlog, you will have to reapply the Chat format. 
-        </p>
-      </div>
-      <div id="gdocs-out">
-        <h2>Selected style: Google Docs</h2>
-        <p>The below output has been styled in such a way that copying it and pasting it into google docs will preserve it's formatting. This will not work on Firefox, as Firefox strips text of it's formatting when copied from a web page.</p>
-        <p style="text-align: center;">
-          <b>Output (Select and copy all)</b> <br>
+      <h1>Copy Output</h1>
+
+      <h2>Selected Style: <span id="styleTitle"></span></h2>
+
+      <textarea name="mainOutput" id="mainOutput" cols="90" rows="30" style="margin: auto; display: block;"></textarea>
+
+      <div id="hints">
+        <div data-style-hint="ao3">
+          <p>
+            <div id="skinStatus">Work is compatible</div>
+          </p>
+          <p>
+            <textarea name="finalAo3CSS" id="finalAo3CSS" cols="70" rows="10" style="margin: auto; display: block;"></textarea>
+          </p>
+        </div>
+
+        <div data-style-hint="tumblr">
+          <p>
+            <b>How to format your tumblr post</b> <br>
+            Posting works on tumblr is a tad tricky due to the tumblr editor being... sub-optimal. On the tumblr post editor, click the gear icon in the corner and change your text editor to HTML. Then paste in your work.
+            <img src="./tumblr-tutorial.png" class="tumblr-tutorial">
+            After you paste your work in, enter the Preview tab. For each pesterlog in your work, highlight any part of it's text and change it's paragraph type to Chat.
+            <img src="./tumblr-tutorial-2.png" class="tumblr-tutorial">
+            If you go back and edit the pesterlog, you will have to reapply the Chat format. 
+          </p>
+        </div>
+
+        <div data-style-hint="discord">
+          <p>
+            Since discord has character limits on it's messages, the output text has been seperated into blocks with dashes. Copy each block of text seperately and paste them into their own message.
+          </p>
+        </div>
+
+        <div data-style-hint="gdocs">
+          <p>
+            The below output has been styled in such a way that copying it and pasting it into google docs will preserve it's formatting. This will not work on Firefox, as Firefox strips text of it's formatting when copied from a web page.
+          </p>
           <div id="finalGdocs"></div>
-        </p>
+        </div>
+
       </div>
-      <div id="cohost-out">
-        <h2>Selected style: Cohost / Plain HTML</h2>
-        <p style="text-align: center;">
-          <b>HTML</b> <br>
-          <textarea name="finalCohost" id="finalCohost" cols="70" rows="10" style="margin: auto; display: block;"></textarea>
-        </p>
-      </div>
-      <div id="epilogue-out">
-        <h2>Selected style: Epilogue HTML</h2>
-        <p style="text-align: center;">
-          <b>HTML</b> <br>
-          <textarea name="finalEpilogue" id="finalEpilogue" cols="70" rows="10" style="margin: auto; display: block;"></textarea>
-        </p>
-      </div>
+
     </div>
 
   </div>

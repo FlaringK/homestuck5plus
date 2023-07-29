@@ -46,7 +46,7 @@ body {
 
 /* Work Styles */
 
-#workskin {
+#workskin, #basic {
   font: 1em 'Lucida Grande','Lucida Sans Unicode',Verdana,Helvetica,sans-serif;
   font-size: .875em;
   padding: 0.5em 1em;
@@ -74,6 +74,16 @@ body {
   margin: 12px 5%;
   padding: 3px;
   text-align: left;
+}
+
+#basic .spoiler {
+  border: 1px dashed gray;
+  padding: 12px 5%;
+  text-align: left;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: bold;
+  font-size: 14px;
+  background-color: #eeeeee;
 }
 
 @font-face {
