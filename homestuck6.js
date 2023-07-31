@@ -290,7 +290,7 @@ const outputStyles = [
       blockSep: "",
       charLimit: {
         limit: 2000,
-        sep: "\n ----------------------------------- \n NEW MESSAGE \n ----------------------------------- \n"
+        sep: "\n----------------------------------- \n# NEW MESSAGE # \n----------------------------------- \n"
       }
     }
   },
@@ -701,6 +701,7 @@ const replaceTextWithStyle = (text, style) => {
 
   let blocks = text.split("\n\n")
   let charCount = 0
+  let blockSep = style.blockSep ?? "\n\n"
 
   blocks.forEach((block, i) => {
     const isLog = block.startsWith("[LOG]")
@@ -733,19 +734,19 @@ const replaceTextWithStyle = (text, style) => {
       block = block.replace(spanRegex, spanFunction) 
     }
 
-    charCount += block.length
+    charCount += block.length + blockSep
 
     if (style.charLimit) {
       if (charCount > style.charLimit.limit) {
         block = style.charLimit.sep + block
-        charCount = block.length
+        charCount = block.length + blockSep
       }
     }
 
     blocks[i] = block
   })
 
-  return blocks.join(style.blockSep ?? "\n\n").trim()
+  return blocks.join(blockSep).trim()
 }
 
 
