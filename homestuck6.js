@@ -278,7 +278,10 @@ const outputStyles = [
       para: [`<p>`, `</p>`],
       log: [`<p class="block"><span class="pesterlog">`, `</span></p>`],
       color: [`<span class="%CLASSTRANSFORM%">`, `</span>`],
-      classTransform: className => discordFormats[className] ? discordFormats[className] : "normal"
+      classTransform: className => discordFormats[className] ? discordFormats[className] : "normal",
+      replaces: [
+        [/<.+?>/gm, ""]
+      ]
     },
     copy: {
       para: [``, ``],
@@ -291,7 +294,10 @@ const outputStyles = [
       charLimit: {
         limit: 2000,
         sep: "\n----------------------------------- \n# NEW MESSAGE # \n----------------------------------- \n"
-      }
+      },
+      replaces: [
+        [/<.+?>/gm, ""]
+      ]
     }
   },
   {
@@ -705,6 +711,13 @@ const replaceTextWithStyle = (text, style) => {
 
   blocks.forEach((block, i) => {
     const isLog = block.startsWith("[LOG]")
+
+    // Custom replaces
+    if (style.replaces) {
+      style.replaces.forEach(replace => {
+        block = block.replace(replace[0], replace[1])
+      });
+    }
 
     // Basic replaces
     block = block.replace(/\[PARA\]/g, style.para[0])
