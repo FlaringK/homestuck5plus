@@ -734,12 +734,12 @@ const replaceTextWithStyle = (text, style) => {
       block = block.replace(spanRegex, spanFunction) 
     }
 
-    charCount += block.length + blockSep
+    charCount += block.length + blockSep.length
 
     if (style.charLimit) {
       if (charCount > style.charLimit.limit) {
         block = style.charLimit.sep + block
-        charCount = block.length + blockSep
+        charCount = block.length + blockSep.length
       }
     }
 
