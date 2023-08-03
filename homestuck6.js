@@ -287,7 +287,7 @@ const outputStyles = [
       para: [``, ``],
       log: ["\n```ansi", "```"],
       color: ["`", "`"],
-      colorLog: [`%CLASSTRANSFORM%`, `"[0;29m`],
+      colorLog: [`%CLASSTRANSFORM%`, `[0;29m`],
       lineEnd: "",
       classTransform: className => discordReplaces[discordFormats[className] ? discordFormats[className] : "normal"],
       blockSep: "",
