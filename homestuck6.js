@@ -228,6 +228,16 @@ const discordReplaces = {
 
 // Styles
 
+const htmlMarkdown = [
+  [/(^|[^\\])\*\*([^\s\\]|[^\s\\].*?[^\s\\])\*\*/gm, "$1<b>$2</b>"], // bold
+  [/(^|[^\\])\*([^\s\\]|[^\s\\].*?[^\s\\])\*/gm, "$1<i>$2</i>"], // Italics
+  [/(^|[^\\])__([^\s\\]|[^\s\\].*?[^\s\\])__/gm, "$1<u>$2</u>"], // underline
+  [/(^|[^\\])~~([^\s\\]|[^\s\\].*?[^\s\\])~~/gm, "$1<s>$2</s>"], // strikethrough
+
+  
+  [/\\([*_~])/gm, "$1"], // Escape
+]
+
 const outputStyles = [
   {
     name: "ao3",
@@ -297,7 +307,8 @@ const outputStyles = [
       },
       replaces: [
         [/<.+?>/gm, ""]
-      ]
+      ],
+      markdown: []
     }
   },
   {
@@ -705,6 +716,8 @@ const convertWork = output => {
 
 const replaceTextWithStyle = (text, style) => {
 
+  const doMD = document.getElementById("doMD").checked
+
   let blocks = text.split("\n\n")
   let charCount = 0
   let blockSep = style.blockSep ?? "\n\n"
@@ -716,7 +729,15 @@ const replaceTextWithStyle = (text, style) => {
     if (style.replaces) {
       style.replaces.forEach(replace => {
         block = block.replace(replace[0], replace[1])
-      });
+      })
+    }
+
+    // Markdown
+    if (doMD) {
+      let markdownReplaces = style.markdown ?? htmlMarkdown
+      markdownReplaces.forEach(replace => {
+        block = block.replace(replace[0], replace[1])
+      })
     }
 
     // Basic replaces
