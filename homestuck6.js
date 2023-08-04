@@ -281,6 +281,25 @@ const outputStyles = [
     }
   },
   {
+    name: "mspfaAlt",
+    title: "MS Paint Fan Adventures (Buttonless spoiler)",
+    htmlid: "slide",
+
+    display: {
+      para: [``, `<br>`],
+      log: [`<div class="spoiler"><div>`, `</div></div><br>`],
+      color: [`<span class="%CLASS%">`, `</span>`],
+      
+    },
+    copy: {
+      para: [``, ``],
+      log: [`<div class="spoiler"><div>`, `</div></div>`],
+      color: [`[color=#%COLOR%]`, `[/color]`],
+      lineEnd: " ",
+      blockSep: ""
+    }
+  },
+  {
     name: "discord",
     title: "Discord ANSI",
 
