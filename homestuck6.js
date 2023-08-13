@@ -686,7 +686,7 @@ const transcribe = () => {
 
 const genTimeHandle = handle => new RegExp("[FCPL]*" + handle.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&'), "gi")
 
-const spanStart = (className, type) => `[SPAN${type ?? ""} "${className}" ${userFormats[className].color}]`
+const spanStart = (className, type) => `[SPAN${type ?? ""} "${className}" ${userFormats[className] ? userFormats[className].color : "#000000"}]`
 
 const setSkinStatus = usedFormats => {
   const skinStatus = document.getElementById("skinStatus")
