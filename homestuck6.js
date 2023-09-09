@@ -240,7 +240,7 @@ const htmlMarkdown = [
   [/\\([*_~])/gm, "$1"], // Escape
 ]
 
-const outputStyles = [
+let outputStyles = [
   {
     name: "ao3",
     title: "Archive Of Our Own",
@@ -398,6 +398,26 @@ const outputStyles = [
       para: [`<p>`, `</p>`],
       log: [`<table class="block"><tr><td><span class="pesterlog">`, `</span></td></tr></table>`],
       color: [`<span style="color: #%COLOR%">`, `</span>`],
+    }
+  },
+
+
+  // Custom Display Style
+  
+  {
+    name: "custom",
+    title: "Custom Display Style",
+
+    display: {
+      para: [`<div>`, `</div>`],
+      log: [`<div class="spoiler">`, `</div>`],
+      color: [`<span class="%CLASS%" style="color: #%COLOR%">`, `</span>`],
+      
+    },
+    copy: {
+      para: [`<div>`, `</div>`],
+      log: [`<div class="spoiler">`, `</div>`],
+      color: [`<span class="%CLASS%" style="color: #%COLOR%">`, `</span>`],
     }
   },
 ]
@@ -1037,6 +1057,48 @@ const addNewDualFormat = () => {
   genNewDualFormat()
   className.value = ""
 }
+
+// Custom Styles
+
+const updateCustomStyle = () => {
+  const tags = Array.prototype.slice.call(document.querySelectorAll("#customStyle textarea")).map(e => e.value)
+
+  outputStyles[outputStyles.length - 1].copy = {
+    para: [tags[0], tags[1]],
+    colorPlain: [tags[2], tags[3]],
+    log: [tags[4], tags[5]],
+    color: [tags[6], tags[7]],
+  }
+
+  localStorage.setItem("customStyle", JSON.stringify(tags))
+  transcribe()
+}
+
+document.querySelectorAll("#customStyle textarea").forEach(e => {
+  e.onchange = updateCustomStyle
+})
+
+const setCustomStyle = (tags) => {
+  document.querySelectorAll("#customStyle textarea").forEach((e, i) => {
+    e.value = tags[i]
+  })
+  updateCustomStyle()
+}
+
+if (localStorage.getItem("customStyle")) {
+  setCustomStyle(JSON.parse(localStorage.getItem("customStyle")))
+}
+
+const resetCustomStyle = () => {
+  setCustomStyle([
+    `<div>`, `</div>`,
+    `<span class="%CLASS%" style="color: #%COLOR%">`, `</span>`,
+    `<div class="spoiler">`, `</div>`,
+    `<span class="%CLASS%" style="color: #%COLOR%">`, `</span>`,
+  ])
+}
+
+// Load Site
 
 genFormatEditor()
 genNewUserFormat()

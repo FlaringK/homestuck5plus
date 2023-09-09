@@ -86,6 +86,7 @@ That's what I'VE been saying!!!
         </div>
       </div>
     </div>
+
     <div id="options">
       <div>
         <button onclick="openPopup('help')" id="helpBtn">Help!</button>
@@ -99,6 +100,7 @@ That's what I'VE been saying!!!
         <button onclick="openPopup('copy')" id="copyBtn">Copy Output</button>
       </div>
     </div>
+
     <div id="popup" onclick="closePopup()">
 
 
@@ -216,79 +218,152 @@ That's what I'VE been saying!!!
 
 
       <div id="format">
-        <h1>Edit Formats</h1>
-        <p>
-          <b>Basic options</b>
-        </p>
-        <div style="columns: 2;" class="formatInteract">
-          <div class="opt">
-            <label for="autoLog">Enable auto pesterlog formatting</label>
-            <input type="checkbox" name="autoLog" id="autoLog" onchange="transcribe()" checked>
+        <h1>Options</h1>
+
+        <details open="">
+          <summary>Basic options</summary>
+          <div style="columns: 2;" class="formatInteract">
+            <div class="opt">
+              <label for="autoLog">Enable auto pesterlog formatting</label>
+              <input type="checkbox" name="autoLog" id="autoLog" onchange="transcribe()" checked>
+            </div>
+            <div class="opt">
+              <label for="handleUpper">Captitalise pesterlog handles</label>
+              <input type="checkbox" name="handleUpper" id="handleUpper" onchange="transcribe()">
+            </div>
+            <div class="opt">
+              <label for="fullColorChum">Fully colour expanded chumhandles</label>
+              <input type="checkbox" name="fullColorChum" id="fullColorChum" onchange="transcribe()" checked>
+            </div>
+            <div class="opt">
+              <label for="fullColorChum">Use Limited Markdown</label>
+              <input type="checkbox" name="doMD" id="doMD" onchange="transcribe()">
+            </div>
           </div>
-          <div class="opt">
-            <label for="handleUpper">Captitalise pesterlog handles</label>
-            <input type="checkbox" name="handleUpper" id="handleUpper" onchange="transcribe()">
+        </details>
+
+        <details>
+          <summary>Custom Display Style</summary>
+
+          <div class="formatInteract" id="customStyle">
+            <div>
+              <div class="opt">
+                Paragraph Tags
+    
+                <div class="styleopt">
+                  <textarea >&lt;div></textarea>
+                  <textarea rows="4">&lt;/div></textarea>
+                </div>
+    
+              </div>
+              <div class="opt">
+                Paragraph Color Tags
+                
+                <div class="styleopt">
+                  <textarea >&lt;span class="%CLASS%" style="color: #%COLOR%"></textarea>
+                  <textarea rows="4">&lt;/span></textarea>
+                </div>
+    
+              </div>
+            </div>
+            <div>
+              <div class="opt">
+                Pesterlog Tags
+                
+                <div class="styleopt">
+                  <textarea >&lt;div class="spoiler"></textarea>
+                  <textarea rows="4">&lt;/div></textarea>
+                </div>
+    
+              </div>
+              <div class="opt">
+                Pesterlog Color Tags
+                
+                <div class="styleopt">
+                  <textarea >&lt;span class="%CLASS%" style="color: #%COLOR%"></textarea>
+                  <textarea rows="4">&lt;/span></textarea>
+                </div>
+    
+              </div>
+            </div>
           </div>
-          <div class="opt">
-            <label for="fullColorChum">Fully colour expanded chumhandles</label>
-            <input type="checkbox" name="fullColorChum" id="fullColorChum" onchange="transcribe()" checked>
-          </div>
-          <div class="opt">
-            <label for="fullColorChum">Use Limited Markdown</label>
-            <input type="checkbox" name="doMD" id="doMD" onchange="transcribe()">
-          </div>
-        </div>
-        <p>
-          <b>Character Formats</b>
-        </p>
+
+          <p>
+            This edits the starting and editing Output formatting within the [Custom Display Style] Display option, applicable if you want to use your own HTML class or apply hs5+ to a format not supported. Each type of tag has a begining on the left and an ending tag on the right. Within the colour tags, %CLASS% will be replaced by the character's class, and %COLOR% will be replaced by the character's color.
+          </p>
+
+          <p>
+            ⚠ The [Custom Display Style] Display option will preview as a generic style. This will not effect the generated output.
+          </p>
+
+          <button onclick="resetCustomStyle()">Reset Custom Display Style to Default</button>
+
+        </details>
+
+        <h1>Character Formats</h1>
+        
         <p>
           <button onclick="restoreDefaultFormats(defultFormats)">Restore AO3 compatible formats</button>
           <button onclick="restoreDefaultFormats(homestuckFormats)">Restore Homestuck accurate formats</button>
         </p>
         <div id="userFormats" class="formatInteract"></div>
-        <p class="formatInteract">
-          <label for="userFormatJson">Exported JSON string:</label>
-          <input type="text" name="userFormatJson" id="userFormatJson" style="width: 80%;">
-        </p>
-        <p>
-          <b>Add Formats</b>
-          <br> New formats may not be included in AO3's standard homstuck workskin, and will require a custom workskin to be compatible. The format class name will be the html class given to the span.
-        </p>
-        <div class="formatInteract">
-          <label for="newFormatName">Format Class Name</label>
-          <input type="text" name="newFormatName" id="newFormatName">
-          <br>
-          <label for="newFormatCol">Format Color</label>
-          <input type="color" name="newFormatCol" id="newFormatCol"> or <input type="text" onchange="document.getElementById(`newFormatCol`).value = this.value" placeholder="#000000">
-          <br>
-          <button onclick="addNewFormat()">Add new format</button>
-        </div>
-        <p>
-          <b>Add dual format</b>
-          <br> Dual formats will format pesterlog handles as diffrent colours then their messages. Dual formats can only be composed of existing formats, so you will have to add each colour of a new dual format before combining them below.
-        </p>
-        <div class="formatInteract">
-          <label for="newDualFormatName">Dual Format Class Name</label>
-          <input type="text" name="newDualFormatName" id="newDualFormatName">
-          <br>
-          <label for="newFormatName">Dual format Handle</label>
-          <select name="dualFormatHandle" id="dualFormatHandle"></select>
-          <br>
-          <label for="newFormatCol">Dual format Text</label>
-          <select name="dualFormatText" id="dualFormatText"></select>
-          <br>
-          <button onclick="addNewDualFormat()">Add new dual format</button>
-        </div>
-        <p>
-          <b>Import Formats</b>
-          <br> Formats will automatically be saved in local storage when they are changed, however you can import a group of formats by pasting in it's JSON string below.
-        </p>
-        <p>
-          <label for="importJson">Import JSON string:</label>
-          <input type="text" name="importJson" id="importJson" style="width: 80%;">
-          <br>
-          <button onclick="importJson()">Import</button>
-        </p>
+
+        <details>
+          <summary>Add Format</summary>
+          <div class="formatInteract">
+            <label for="newFormatName">Format Class Name</label>
+            <input type="text" name="newFormatName" id="newFormatName">
+            <br>
+            <label for="newFormatCol">Format Color</label>
+            <input type="color" name="newFormatCol" id="newFormatCol"> or <input type="text" onchange="document.getElementById(`newFormatCol`).value = this.value" placeholder="#000000">
+
+            <button class="endbutton" onclick="addNewFormat()">Add new format</button>
+          </div>
+          <p>
+            ⚠ New formats may not be included in AO3's standard homstuck workskin, and will require a custom workskin to be compatible. The format class name will be the html class given to the span.
+          </p>
+        </details>
+
+        <details>
+          <summary>Add dual format</summary>
+          <div class="formatInteract">
+            <label for="newDualFormatName">Dual Format Class Name</label>
+            <input type="text" name="newDualFormatName" id="newDualFormatName">
+            <br>
+            <label for="newFormatName">Dual format Handle</label>
+            <select name="dualFormatHandle" id="dualFormatHandle"></select>
+            <br>
+            <label for="newFormatCol">Dual format Text</label>
+            <select name="dualFormatText" id="dualFormatText"></select>
+
+            <button class="endbutton" onclick="addNewDualFormat()">Add new dual format</button>
+          </div>
+          <p> 
+            ⚠ Dual formats will format pesterlog handles as diffrent colours then their messages. Dual formats can only be composed of existing formats, so you will have to add each colour of a new dual format before combining them below.
+          </p>
+        </details>
+
+        <details>
+          <summary>Export Formats</summary>
+          <p class="formatInteract">
+            <label for="userFormatJson">Exported JSON string:</label>
+            <input type="text" name="userFormatJson" id="userFormatJson" style="width: 80%;">
+          </p>
+        </details>
+
+        <details>
+          <summary>Import Formats</summary>
+          <div class="formatInteract">
+            <label for="importJson">Import JSON string:</label>
+            <input type="text" name="importJson" id="importJson" style="width: 80%;">
+            <br>
+            <button onclick="importJson()">Import</button>
+          </div>
+          <p>
+            ⚠ Formats will automatically be saved in local storage when they are changed, however you can import a group of formats by pasting in it's JSON string below.
+          </p>
+        </details>
+
       </div>
 
 
@@ -324,6 +399,7 @@ That's what I'VE been saying!!!
 
 
     </div>
+
     <script src="./homestuck6.js"></script>
   </body>
 </html>
