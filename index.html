@@ -302,11 +302,11 @@ That's what I'VE been saying!!!
 
         <h1>Character Formats</h1>
         
-        <p>
+        <div id="userFormats" class="formatInteract"></div>
+        <p style="text-align: right;">
           <button onclick="restoreDefaultFormats(defultFormats)">Restore AO3 compatible formats</button>
           <button onclick="restoreDefaultFormats(homestuckFormats)">Restore Homestuck accurate formats</button>
         </p>
-        <div id="userFormats" class="formatInteract"></div>
 
         <details>
           <summary>Add Format</summary>
@@ -356,8 +356,7 @@ That's what I'VE been saying!!!
           <div class="formatInteract">
             <label for="importJson">Import JSON string:</label>
             <input type="text" name="importJson" id="importJson" style="width: 80%;">
-            <br>
-            <button onclick="importJson()">Import</button>
+            <button class="endbutton" onclick="importJson()">Import</button>
           </div>
           <p>
             ⚠ Formats will automatically be saved in local storage when they are changed, however you can import a group of formats by pasting in it's JSON string below.
