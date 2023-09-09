@@ -1,3 +1,5 @@
+// FORMATS
+
 const defultFormats = {
   john: {
     color: "#0715cd",
@@ -410,86 +412,13 @@ outputStyles.forEach((style, i) => {
   styleSelect.appendChild(styleOption)
 })
 
-// Convert Work styles
-// const workStyleFunctions = [
-//   // Mspfa
-//   output => {
-//     const mspfa = document.getElementById("slide")
-//     mspfa.innerHTML = output.replace(regParaBlock, `<div class="spoiler"><div>$1</div></div><br>`).replace(regParagraph, `$1 <br>`)
-
-//     document.getElementById("finalMspfaHtml").value = mspfa.innerHTML.replace(/<span class="(.+?)">/g, (match, p1) => {
-//       return `[color=${userFormats[p1.replace("-plain", "")].color}]`
-//     }).replace(/<\/span>/g, "[/color]").replace(/<div class="spoiler"><div>((.|\n)*?)<\/div><\/div><br>/g, "[spoiler]$1[/spoiler]").replace(/<br>/g, "").replace(/^\s+/gm, "").trim()
-
-//     document.getElementById("finalMspfaHtmlEsc").value = document.getElementById("finalMspfaHtml").value.replace(/\n/g, "\\n").replace(/"/g, "\\\"")
-//   },
-//   // Discord
-//   output => {
-//     const discord = document.getElementById("discord")
-//     discord.innerHTML = output.replace(regParaBlock, (match, p1) => {
-//       return `<p class="block"><span class="pesterlog">${
-//         p1.replace(/<span class="(.+?)"/g, (match, p1) => `<span class="${discordFormats[p1] ? discordFormats[p1] : "normal"}"`)
-//       }</span></p>`
-//     })
-
-//     document.getElementById("finalDiscord").value = discord.innerHTML.replace(/^\s+/gm, "").replace(regParaBlock, (match, p1) => {
-//       return `\`\`\`ansi${p1.replace(/<\/span>/g, "[0;29m").replace(/<br>/g, "").replace(/<span class="(.+?)">/g, (match, p1) => {
-//         return discordReplaces[p1] ? discordReplaces[p1] : ""
-//       })}\`\`\`` 
-//     }).replace(/```\n/g, "```").replace(regParagraph, (match, p1) => {
-//       return p1.replace(/<span.+?>|<\/span>/g, "`").replace(/<br>/, "")
-//     }).replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&").trim()
-
-//     const charCount = 2000 - document.getElementById("finalDiscord").value.length
-
-//     document.getElementById("discordChara").innerText = "Characters left: " + charCount
-//     document.getElementById("discordChara").style.color = charCount < 0 ? "rgb(241, 104, 106)" : "#dcddde"
-//     document.getElementById("discordChara").style.fontWeight = charCount < 0 ? "600" : "400"
-//   },
-//   // Tumblr
-//   output => {
-//     const tumblr = document.getElementById("tumblr")
-//     tumblr.innerHTML = output.replace(regParaBlock, `<p class="npf_chat"><b>$1</b></p>`).replace(/<span class="(.+?)">/g, (match, p1) => {
-//       return `<span style="color: ${userFormats[p1.replace("-plain", "")].color}">`
-//     }).replace(/^\s+/gm, "")
-
-//     document.getElementById("finalTumblr").value = tumblr.innerHTML
-//   },
-//   // Gdocs
-//   output => {
-//     const gdocs = document.getElementById("gdocs")
-//     gdocs.innerHTML = output.replace(/^\s+/gm, "").replace(/<p class="block"><span class="pesterlog">\n((.|\n)*?)\n<\/span><\/p>/g, `<table class="block"><tr><td><span class="pesterlog">$1</span></td></tr></table>`).replace(/-plain"/g, " plain\"")
-
-//     document.getElementById("finalGdocs").innerHTML = gdocs.innerHTML.replace(/<br>/g, "")
-//   },
-//   // Cohost 
-//   output => {
-//     const cohost = document.getElementById("cohost")
-//     cohost.innerHTML = output.replace(regParaBlock, (match, p1) => {
-//       let colourSpans = p1.replace(/<span class="(.+?)">/g, (match, p1) => {
-//         return `<span style='color: ${userFormats[p1.replace("-plain", "")].color};'>`
-//       })
-//       return `<div style='background: #eeeeee; padding: 12px 5%; font-family: Courier New, Courier, monospace; font-weight: bold; line-height: 1.2em; border: 1px dashed gray; font-size: 14px;text-align: left;'>${colourSpans}</div>`
-//     }).replace(/<span class="(.+?)">/g, (match, p1) => {
-//       return `<span style='color: ${userFormats[p1.replace("-plain", "")].color}; ${p1.includes("-plain") ? "" : "font-family: Courier New, Courier, monospace; font-weight: bold"};'>`
-//     }).replace(/^\s+/gm, "").replace(/<\/div>\n<div/g, "</div>\n<br><div")
-
-//     document.getElementById("finalCohost").innerHTML = cohost.innerHTML
-//   },
-//   // Epilogue
-//   output => {
-//     const epilogue = document.getElementById("epilogue")
-//     epilogue.innerHTML = output.replace(regParaBlock, `<div class="chat" style="margin: 15px 0px 15px 25px; font-family: 'courier-std', courier, monospace; font-weight: bold; line-height: 1.35;">$1</div>`).replace(/<span class="(.+?)">/g, (match, p1) => {
-//       return `<span style='color: ${userFormats[p1.replace("-plain", "")].color}; ${p1.includes("-plain") ? "" : "font-family: Courier New, Courier, monospace; font-weight: bold"};'>`
-//     }).replace(regParagraph, `<p style="text-indent: 25px; margin: 0;">$1</p>`).replace(/<p style="text-indent: 25px; margin: 0;">([\n\s]*)([^<])/, `<p class="no-indent" style="margin: 0;">$1<span class="opener" style="float: left; font-size: 51px; font-family: FontStuck Extended, Homestuck-Regular, monospace; line-height: 0.7; margin-right: 4px; font-weight: bold">$2</span>`).replace(/<p style="text-indent: 25px; margin: 0;">([\n\s])*>/g, `<p class="command" style="margin: 15px 0px 15px 25px; font-family: Verdana, sans-serif;">$1>`)
-
-//     document.getElementById("finalEpilogue").innerHTML = epilogue.innerHTML
-//   }
-// ]
-
 // Transcribe Input
-const transcribe = () => {
-  const outputDiv = document.getElementById("workskin")
+
+let pressedKeys = {};
+window.onkeyup = function(e) { pressedKeys[e.keyCode] = false; }
+window.onkeydown = function(e) { pressedKeys[e.keyCode] = true; }
+
+const transcribe = (e) => {
   const inputText = document.getElementById("input").value.trim()
 
   // Options
@@ -681,6 +610,13 @@ const transcribe = () => {
   setSkinStatus(usedFormats)
   convertWork(output)
 
+  // If new text scroll down
+  const workArea = document.querySelector("#outputs")
+  const inputField = document.querySelector("#input")
+  if (inputField.selectionStart == inputField.value.length) { 
+    workArea.scrollTop = workArea.scrollHeight
+  }
+
 }
 
 
@@ -714,7 +650,6 @@ const convertWork = output => {
 
   document.getElementById("styleTitle").innerText = selectedStyle.title
 
-  console.log(selectedStyle)
   workDiv.innerHTML = ""
   workDiv.className = selectedStyle.name
   workDiv.id = selectedStyle.htmlid ?? selectedStyle.name
