@@ -233,22 +233,27 @@ body {
 
 /* Options Hud */
 
-#title {
-  font-family: fontstuck;
-  font-size: 3em;
-  text-shadow: #000 0.05em 0.05em 0;
-  text-align: center;
-  margin-top: -.25em;
-}
-
 #options {
   padding: 0.25em;
   display: flex;
   justify-content: space-between;
+
+  background-image: url(./logo.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  image-rendering: pixelated;
+}
+
+@media screen and (max-width: 1000px) {
+  #options {
+    background-image: url(./logomini.png);
+  }
 }
 
 #options > * {
-  width: 30%;
+  width: 50%;
 }
 
 #options button {
@@ -268,11 +273,6 @@ body {
   color: var(--col);
   border-color: var(--col);
 }
-
-#helpBtn { --col: #0715cd; }
-#aboutBtn { --col: #b536da; }
-#formatsBtn { --col: #e00707; }
-#copyBtn { --col: #4ac925; margin-left: auto; display: block;}
 
 /* Popups */
 
@@ -493,4 +493,27 @@ body {
 
 #format button:not(.formatBin):hover {
   opacity: 0.8;
+}
+
+#format button:not(.formatBin):active {
+  color: var(--col);
+  border-color: var(--col);
+  background-color: transparent;
+}
+
+.autoSave {
+  display: flex;
+  gap: 1em;
+  justify-content: space-between;
+  margin: 0.25em;
+  padding: 0.25em;
+  border-radius: 0.25em;
+}
+
+.autoSave textarea {
+  flex-grow: 1;
+}
+
+.autoSave:hover {
+  background-color: #eee;
 }

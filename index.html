@@ -76,8 +76,7 @@ $Caliborn- WHAT. LIKE THIS? $- OR LIKE THIS, $Caliborn- AND THEN LIKE THIS?$- OR
 Actually, you pretty much covered it!
 $Roxy FF: $Rose  I got my chumhandle working!
 TT: Well, I'm glad someone's having a good time.
-That's what I'VE been saying!!!
-    </textarea>
+That's what I'VE been saying!!!</textarea>
       <div id="outputs">
         <div id="outputHeader"> Display style: <select name="workStyles" id="workStyles" onchange="transcribe()"></select>
         </div>
@@ -89,15 +88,13 @@ That's what I'VE been saying!!!
 
     <div id="options">
       <div>
-        <button onclick="openPopup('help')" id="helpBtn">Help!</button>
-        <button onclick="openPopup('about')" id="aboutBtn">About</button>
-        <button onclick="openPopup('format')" id="formatsBtn">Edit Formats</button>
+        <button style="--col: #0715cd" onclick="openPopup('help')" id="helpBtn">Help!</button>
+        <button style="--col: #b536da" onclick="openPopup('about')" id="aboutBtn">About</button>
+        <button style="--col: #626262" onclick="openPopup('format')" id="formatsBtn">Edit Formats</button>
       </div>
-      <div id="title">
-        <span style="color: #2ed73a">Homestuck5</span><span style="color: #e00707">plus</span>
-      </div>
-      <div style="text-align: left;">
-        <button onclick="openPopup('copy')" id="copyBtn">Copy Output</button>
+      <div style="text-align: right;">
+        <button style="--col: #e00707" onclick="openPopup('recover')" id="formatsBtn">Auto Saves</button>
+        <button style="--col: #4ac925" onclick="openPopup('copy')" id="copyBtn">Copy Output</button>
       </div>
     </div>
 
@@ -363,6 +360,22 @@ That's what I'VE been saying!!!
           </p>
         </details>
 
+      </div>
+
+
+      <div id="recover">
+        <h1>Auto Save Recovery</h1>
+        <p>
+          ⚠ This menu is only for recovering lost drafts, it is not recommened you rely on this system to save your work as it saves into your local storage. Please save any drafts you intend to come back to later in a secure place to ensure that you do not lose your work.
+        </p>
+        <p>
+          ⚠ This menu will only save the last 35 auto saves.
+        </p>
+        <div class="formatInteract">
+          Auto save every <input type="number" id="autosavecount" value="25" min="10" onchange="setMaxEdit(this.value)"> edits.
+        </div>
+        <div id="autoSaves" class="formatInteract">
+        </div>
       </div>
 
 

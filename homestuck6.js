@@ -1,4 +1,4 @@
-// FORMATS
+// LOAD FORMATS
 
 const defultFormats = {
   john: {
@@ -193,9 +193,6 @@ const regHandle = /^[^\s]*?:/
 const regChum = /{[^\s]*?}/g
 const regCharSpans = /\$[^\s]*/g
 
-// const regParagraph = /<p>((.|\n)*?)<\/p>/g
-// const regParaBlock = /<p class="block"><span class="pesterlog">((.|\n)*?)<\/span><\/p>/g
-
 const logSyntax = "%LOG%"
 
 const ao3CSS = `#workskin .block {
@@ -228,7 +225,7 @@ const discordReplaces = {
   grey: "[0;30m",
 }
 
-// Styles
+// Load Styles
 
 const htmlMarkdown = [
   [/(^|[^\\])\*\*([^\s\\]|[^\s\\].*?[^\s\\])\*\*/gm, "$1<b>$2</b>"], // bold
@@ -422,8 +419,6 @@ let outputStyles = [
   },
 ]
 
-// Prepare Styles
-
 const styleSelect = document.getElementById("workStyles")
 outputStyles.forEach((style, i) => {
   const styleOption = document.createElement("option")
@@ -431,6 +426,13 @@ outputStyles.forEach((style, i) => {
   styleOption.innerText = style.title
   styleSelect.appendChild(styleOption)
 })
+
+// Load Auto save
+
+let editCount = 0
+let maxEditCount = localStorage.getItem("maxEditCount") ?? 25
+let autoSaves = localStorage.getItem("autoSaves") ? JSON.parse(localStorage.getItem("autoSaves")) : []
+const maxAutoSaves = 35
 
 // Transcribe Input
 
@@ -637,6 +639,13 @@ const transcribe = (e) => {
     workArea.scrollTop = workArea.scrollHeight
   }
 
+  // Auto Save
+  editCount += 1
+  if (maxEditCount <= editCount) {
+    editCount = 0
+    autoSaveWork()
+  }
+
 }
 
 
@@ -755,6 +764,47 @@ const replaceTextWithStyle = (text, style) => {
   })
 
   return blocks.join(blockSep).trim()
+}
+
+// == Auto save == 
+
+const autoSaveWork = () => {
+  const inputText = document.getElementById("input").value
+  const d = new Date();
+  let timeNow = d.toLocaleString();
+
+  autoSaves.unshift({
+    text: inputText,
+    time: timeNow
+  })
+  if (autoSaves.length > maxAutoSaves) {
+    autoSaves.pop()
+  }
+
+  localStorage.setItem("autoSaves", JSON.stringify(autoSaves))
+  loadAutoSaves()
+  console.log("Auto saved!")
+}
+
+const loadAutoSaves = () => {
+  const autoSavesDiv = document.getElementById("autoSaves")
+  
+  autoSavesDiv.innerHTML = ""
+
+  autoSaves.forEach(e => {
+    autoSavesDiv.innerHTML += `
+    <div class="autoSave">
+      <div>
+        ${e.time.split(",").join("<br>")}
+      </div>
+      <textarea>${e.text}</textarea>
+    </div>`
+  })
+}
+
+const setMaxEdit = (value) => {
+  maxEditCount = value
+  localStorage.setItem("maxEditCount", value)
 }
 
 
@@ -1098,8 +1148,11 @@ const resetCustomStyle = () => {
   ])
 }
 
+
+
 // Load Site
 
+loadAutoSaves()
 genFormatEditor()
 genNewUserFormat()
 transcribe()
