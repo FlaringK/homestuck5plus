@@ -395,6 +395,7 @@ let outputStyles = [
       para: [`<p>`, `</p>`],
       log: [`<table class="block"><tr><td><span class="pesterlog">`, `</span></td></tr></table>`],
       color: [`<span style="color: #%COLOR%">`, `</span>`],
+      lineEnd: "",
     }
   },
 
@@ -1118,6 +1119,8 @@ const updateCustomStyle = () => {
     colorPlain: [tags[2], tags[3]],
     log: [tags[4], tags[5]],
     color: [tags[6], tags[7]],
+    lineStart: tags[8] ?? "",
+    lineEnd: tags[9] ?? "<br>",
   }
 
   localStorage.setItem("customStyle", JSON.stringify(tags))
@@ -1145,6 +1148,7 @@ const resetCustomStyle = () => {
     `<span class="%CLASS%" style="color: #%COLOR%">`, `</span>`,
     `<div class="spoiler">`, `</div>`,
     `<span class="%CLASS%" style="color: #%COLOR%">`, `</span>`,
+    ``, `<br>`,
   ])
 }
 
