@@ -602,7 +602,7 @@ const transcribe = (e) => {
             let handleRegex = genTimeHandle(formatHandle)
             if (handle.match(handleRegex) && !replaced) if (handle.match(handleRegex)[0] == handle) {
               let prefix = handle.slice(0, formatHandle.length * -1)
-              prefix = prefix.replace(/P/gi, "PAST ").replace(/F/gi, "FUTURE ").replace(/C/gi, "CURRENT ").replace(/L/gi, "LATER ")
+              prefix = prefix.replace(/P/gi, "PAST ").replace(/F/gi, "FUTURE ").replace(/C/gi, "CURRENT ").replace(/L/gi, "LATER ").replace(/\?/gi, "??? ")
               transformChumHandle(spanClass, format, prefix)
             }
           })
@@ -650,7 +650,7 @@ const transcribe = (e) => {
 }
 
 
-const genTimeHandle = handle => new RegExp("[FCPL]*" + handle.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&'), "gi")
+const genTimeHandle = handle => new RegExp("[FCPL?]*" + handle.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&'), "gi")
 
 const spanStart = (className, type) => `[SPAN${type ?? ""} "${className}" ${userFormats[className] ? userFormats[className].color : "#000000"}]`
 
