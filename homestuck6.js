@@ -383,6 +383,37 @@ let outputStyles = [
     },
   },
   {
+    name: "renpy",
+    title: "RenPy (Long log)",
+    htmlid: "slide",
+
+    display: {
+      para: [``, `<br>`],
+      log: [`<div class="spoiler"><div>`, `</div></div><br>`],
+      color: [`<span class="%CLASS%">`, `</span>`],
+      
+    },
+    copy: {
+      para: [``, ``],
+      log: [`\n\ntext "`, `"\n\n`],
+      color: [`{color=#%COLOR%}`, `{/color}`],
+      lineEnd: "",
+      replaces: [
+        [/([^\n])\n/g, "$1\\n"],
+        [/\{/g, "{{"],
+      ],
+      replacesFinal: [
+        [/\[/g, "[["],
+        [/%/g, "%%"],
+        [/"/g, `\\"`],
+        [/text \\"\\n/g, `text "`],
+        [/ \\n\\"/g, `"`],
+        [/\\n(.+)\\n/gm, `$1`],
+      ],
+      blockSep: ""
+    }
+  },
+  {
     name: "gdocs",
     title: "Google Docs",
 
@@ -759,6 +790,13 @@ const replaceTextWithStyle = (text, style) => {
         block = style.charLimit.sep + block
         charCount = block.length + blockSep.length
       }
+    }
+
+    // Custom replaces
+    if (style.replacesFinal) {
+      style.replacesFinal.forEach(replace => {
+        block = block.replace(replace[0], replace[1])
+      })
     }
 
     blocks[i] = block

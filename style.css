@@ -65,6 +65,10 @@ body {
 
 .slide { background-color: #eeeeee; }
 
+#slide.renpy {
+  background-color: white;
+}
+
 #slide .spoiler {
   border: 1px dashed gray;
   padding: 1px;
