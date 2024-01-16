@@ -1016,6 +1016,7 @@ const addNewFormat = () => {
   const color = document.getElementById("newFormatCol")
 
   if (!className.value) return
+  className.value = className.value.replace(" ", "_")
 
   let newUserFormat = JSON.parse(JSON.stringify(userFormats))
   newUserFormat[className.value] = {
