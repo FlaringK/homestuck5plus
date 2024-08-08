@@ -301,6 +301,7 @@ body {
   padding: 10px;
 
   font-family: Arial, Helvetica, sans-serif;
+  max-width: 80vw;
   width: 650px;
 
   height: max-content;
@@ -520,4 +521,28 @@ body {
 
 .autoSave:hover {
   background-color: #eee;
+}
+
+/* Mobile */
+
+@media (max-width: 700px) {
+
+  #textWrap {
+    flex-wrap: wrap-reverse;
+  }
+
+  #textWrap > * {
+    width: 100%;
+    height: calc(50vh - 30px);
+  }
+
+  #options button {
+    font-size: 15px;
+  }
+
+  .ex {
+    flex-wrap: wrap;
+    max-width: 90%;
+  }
+
 }
