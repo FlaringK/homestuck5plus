@@ -383,6 +383,10 @@ body {
 
 /* Format Editor */
 
+.opt {
+  padding: 0.5em 0;
+}
+
 .formatInteract {
   border: 1px dashed gray;
   padding: 10px;

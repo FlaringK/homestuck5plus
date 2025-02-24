@@ -479,6 +479,7 @@ const transcribe = (e) => {
   const doAutoLog = document.getElementById("autoLog").checked
   const doHandleUpper = document.getElementById("handleUpper").checked
   const doFullColourChum = document.getElementById("fullColorChum").checked
+  const doHandleSpaces = document.getElementById("handleSpaces").checked
 
   // Split into lines
   const lines = inputText.split("\n")
@@ -573,6 +574,7 @@ const transcribe = (e) => {
         const transformLineHandle = (spanClass, format) => {
           if (lineHandle.includes("-")) line = line.replace(lineHandle, lineHandle.replace(/-+$/g, ""))
           if (doHandleUpper) line = line.replace(lineHandle, lineHandle.toUpperCase())
+          if (doHandleSpaces) line = line.replace(lineHandle, lineHandle.replace(/_/g, " "))
           if ("dualCol" in format) line = line.replace(lineHandle + ":", `${lineHandle}:[/SPAN]${spanStart(format.colorClasses[1])}`)
 
           line = `${spanStart("dualCol" in format ? format.colorClasses[0] : spanClass)}${line}[/SPAN]`
