@@ -1081,8 +1081,8 @@ const genCSSstyle = () => {
 #workskin .${spanClass}-plain { color: ${format.color}; }
     `
     genMspfaStyle.innerHTML += `
-    #slide .${spanClass} { color: ${format.color} }
-    #slide .${spanClass}-plain { color: ${format.color}; }
+#slide .${spanClass} { color: ${format.color} }
+#slide .${spanClass}-plain { color: ${format.color}; }
         `
     genGdocsStyle.innerHTML += `
 #gdocs .${spanClass}, #finalGdocs .${spanClass} { color: ${format.color} }
@@ -1193,7 +1193,26 @@ const resetCustomStyle = () => {
   ])
 }
 
+// Generate Image
 
+const generateImage = () => {
+  html2canvas(document.querySelector("#work")).then(canvas => {
+    document.getElementById("canvasWrap").innerHTML = ""
+    document.getElementById("canvasWrap").appendChild(canvas)
+
+    let canvasElement = document.querySelector("#canvasWrap canvas")
+    canvasElement.style.aspectRatio = canvas.height + " / " + canvas.width
+    canvasElement.style.height = ""
+    canvasElement.style.width = ""
+  });
+}
+
+const saveCanvas = () => {
+  var link = document.createElement('a');
+  link.download = "Homestuck5plus_" + Date.now() + ".png";
+  link.href = document.querySelector("#canvasWrap canvas").toDataURL()
+  link.click();
+}
 
 // Load Site
 

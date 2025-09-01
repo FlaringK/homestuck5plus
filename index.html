@@ -11,7 +11,9 @@
     <style id="genAo3Style"></style>
     <style id="genGdocsStyle"></style>
     <style id="genMspfaStyle"></style>
+
     <link rel="stylesheet" href="./style.css">
+    <script src="./html2canvas.min.js"></script>
 
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -91,13 +93,14 @@ That's what I'VE been saying!!!</textarea>
 
     <div id="options">
       <div>
-        <button style="--col: #0715cd" onclick="openPopup('help')" id="helpBtn">Help!</button>
-        <button style="--col: #b536da" onclick="openPopup('about')" id="aboutBtn">About</button>
+        <button style="--col: #a10000" onclick="openPopup('help')" id="helpBtn">Help!</button>
+        <button style="--col: #a1a100" onclick="openPopup('about')" id="aboutBtn">About</button>
         <button style="--col: #626262" onclick="openPopup('format')" id="formatsBtn">Edit Formats</button>
       </div>
       <div style="text-align: right;">
-        <button style="--col: #e00707" onclick="openPopup('recover')" id="formatsBtn">Auto Saves</button>
-        <button style="--col: #4ac925" onclick="openPopup('copy')" id="copyBtn">Copy Output</button>
+        <button style="--col: #008141" onclick="openPopup('recover')" id="formatsBtn">Auto Saves</button>
+        <button style="--col: #008282" onclick="openPopup('copy')" id="copyBtn">Copy Output</button>
+        <button style="--col: #005682" onclick="openPopup('image'); generateImage()" id="copyBtn">Save as Image</button>
       </div>
     </div>
 
@@ -422,6 +425,16 @@ That's what I'VE been saying!!!</textarea>
             <p> The below output has been styled in such a way that copying it and pasting it into google docs will preserve it's formatting. This will not work on Firefox, as Firefox strips text of it's formatting when copied from a web page. </p>
             <div id="finalGdocs"></div>
           </div>
+        </div>
+      </div>
+
+      <div id="image">
+        <h1>Download Output as Image</h1>
+        <div style="text-align: center;">
+          <button onclick="saveCanvas()">Save Image</button>
+        </div>
+        <div id="canvasWrap">
+
         </div>
       </div>
 
