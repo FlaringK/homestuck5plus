@@ -305,8 +305,7 @@ let outputStyles = [
     display: {
       para: [`<p>`, `</p>`],
       log: [`<p class="block"><span class="pesterlog">`, `</span></p>`],
-      color: [`<span class="%CLASSTRANSFORM%">`, `</span>`],
-      classTransform: className => discordFormats[className] ? discordFormats[className] : "normal",
+      color: [`<span style="color: #%COLOR%">`, `</span>`],
       replaces: [
         [/<.+?>/gm, ""]
       ]
@@ -317,7 +316,7 @@ let outputStyles = [
       color: ["`", "`"],
       colorLog: [`%CLASSTRANSFORM%`, `[0;29m`],
       lineEnd: "",
-      classTransform: className => discordReplaces[discordFormats[className] ? discordFormats[className] : "normal"],
+      classTransform: className => discordFormats[className],
       blockSep: "",
       charLimit: {
         limit: 2000,
@@ -1091,17 +1090,23 @@ const genCSSstyle = () => {
     
     // Discord    
     if (format.color) {
-      let closestCol = [1000, "grey"]
-      for (const [colName, hexCol] of Object.entries(discordCols)) {
-        const diff = getDiffColor(format.color, hexCol)
-        if (closestCol[0] > diff) closestCol = [diff, colName]
-      }
-      discordFormats[spanClass] = closestCol[1]
+      // Old formats
 
-      let greyTest = hexToRgb(format.color)
-      if (greyTest.r == greyTest.b && greyTest.b == greyTest.g) {
-        discordFormats[spanClass] = greyTest.r > 60 ? greyTest.r > 128 ? "white" : "normal" : "grey"
-      }
+      // let closestCol = [1000, "grey"]
+      // for (const [colName, hexCol] of Object.entries(discordCols)) {
+      //   const diff = getDiffColor(format.color, hexCol)
+      //   if (closestCol[0] > diff) closestCol = [diff, colName]
+      // }
+      // discordFormats[spanClass] = closestCol[1]
+
+      // let greyTest = hexToRgb(format.color)
+      // if (greyTest.r == greyTest.b && greyTest.b == greyTest.g) {
+      //   discordFormats[spanClass] = greyTest.r > 60 ? greyTest.r > 128 ? "white" : "normal" : "grey"
+      // }
+
+      // New format
+      let rgb = hexToRgb(format.color)
+      discordFormats[spanClass] = `[38;2;${rgb.r};${rgb.g};${rgb.b}m`
     }
     
   }
